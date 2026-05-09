@@ -1,14 +1,12 @@
-import { Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { VcHeadingComponent, VcTextComponent } from '@vyracare/design-system';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, VcHeadingComponent, VcTextComponent],
+  imports: [RouterOutlet],
   templateUrl: './app.html',
-  styleUrl: './app.scss'
+  styleUrl: './app.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class App {
-  protected readonly title = signal('vyracare-app-proceedings-mfe');
-}
+export class App {}

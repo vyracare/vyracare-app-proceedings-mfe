@@ -1,0 +1,143 @@
+<form class="proceeding-form" [formGroup]="form" (ngSubmit)="onSubmit()">
+  <fieldset [disabled]="loading" class="form-fieldset">
+    <div class="form-card">
+      <div class="form-header">
+        <vc-heading [level]="2">Configuracao do procedimento</vc-heading>
+        <vc-text [muted]="true">Defina categoria, duracao, preco e orientacoes para padronizar a oferta da clinica.</vc-text>
+      </div>
+
+      <div class="vc-row form-grid">
+        <div class="vc-col-12 vc-col-md-6">
+          <vc-input
+            id="procedure-name"
+            label="Nome do procedimento"
+            placeholder="Ex: Toxina botulinica premium"
+            formControlName="name"
+            [error]="form.controls.name.touched && form.controls.name.invalid ? 'Informe o nome do procedimento.' : ''"
+          ></vc-input>
+        </div>
+
+        <div class="vc-col-12 vc-col-md-6">
+          <vc-select
+            id="procedure-category"
+            label="Categoria"
+            placeholder="Selecione a categoria"
+            formControlName="category"
+            [options]="categoryOptions"
+            [error]="form.controls.category.touched && form.controls.category.invalid ? 'Selecione a categoria.' : ''"
+          ></vc-select>
+        </div>
+
+        <div class="vc-col-12 vc-col-md-4">
+          <vc-input
+            id="procedure-code"
+            label="Codigo interno"
+            placeholder="Ex: FAC-014"
+            formControlName="code"
+            [error]="form.controls.code.touched && form.controls.code.invalid ? 'Defina um codigo interno.' : ''"
+          ></vc-input>
+        </div>
+
+        <div class="vc-col-12 vc-col-md-4">
+          <vc-input
+            id="procedure-target-area"
+            label="Area principal"
+            placeholder="Ex: Face, abdome ou couro cabeludo"
+            formControlName="targetArea"
+            [error]="form.controls.targetArea.touched && form.controls.targetArea.invalid ? 'Informe a area principal.' : ''"
+          ></vc-input>
+        </div>
+
+        <div class="vc-col-12 vc-col-md-4">
+          <vc-input
+            id="procedure-recovery-time"
+            label="Recuperacao"
+            placeholder="Ex: 24 horas"
+            formControlName="recoveryTime"
+          ></vc-input>
+        </div>
+
+        <div class="vc-col-12 vc-col-md-4">
+          <vc-input
+            id="procedure-duration"
+            label="Duracao em minutos"
+            type="number"
+            placeholder="60"
+            formControlName="durationMinutes"
+            [error]="
+              form.controls.durationMinutes.touched && form.controls.durationMinutes.invalid
+                ? 'Informe uma duracao valida.'
+                : ''
+            "
+          ></vc-input>
+        </div>
+
+        <div class="vc-col-12 vc-col-md-4">
+          <vc-input
+            id="procedure-price"
+            label="Preco por sessao"
+            type="number"
+            placeholder="250"
+            formControlName="sessionPrice"
+            [error]="
+              form.controls.sessionPrice.touched && form.controls.sessionPrice.invalid
+                ? 'Informe um preco valido.'
+                : ''
+            "
+          ></vc-input>
+        </div>
+
+        <div class="vc-col-12 vc-col-md-4">
+          <vc-input
+            id="procedure-session-count"
+            label="Numero de sessoes"
+            type="number"
+            placeholder="1"
+            formControlName="sessionCount"
+            [error]="
+              form.controls.sessionCount.touched && form.controls.sessionCount.invalid
+                ? 'Informe a quantidade de sessoes.'
+                : ''
+            "
+          ></vc-input>
+        </div>
+
+        <div class="vc-col-12">
+          <label class="description-field" for="procedure-description">
+            <span>Descricao comercial</span>
+            <textarea
+              id="procedure-description"
+              rows="4"
+              placeholder="Explique o beneficio principal, protocolo e observacoes para a equipe."
+              formControlName="description"
+              [class.invalid]="form.controls.description.touched && form.controls.description.invalid"
+            ></textarea>
+            <small *ngIf="form.controls.description.touched && form.controls.description.invalid">
+              Informe uma descricao com pelo menos 10 caracteres.
+            </small>
+          </label>
+        </div>
+      </div>
+
+      <div class="toggle-row">
+        <label class="switch">
+          <input type="checkbox" formControlName="active" />
+          <span class="slider"></span>
+        </label>
+        <div>
+          <strong>Disponivel para venda</strong>
+          <p>Quando ativo, o procedimento pode ser utilizado na tabela da empresa.</p>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <vc-button type="button" variant="ghost" (click)="resetForm()">Limpar</vc-button>
+        <vc-button type="submit" [loading]="loading" [disabled]="loading">
+          {{ loading ? 'Salvando...' : 'Salvar procedimento' }}
+        </vc-button>
+      </div>
+
+      <p class="error-banner" *ngIf="error">{{ error }}</p>
+    </div>
+  </fieldset>
+</form>

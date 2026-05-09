@@ -1,0 +1,236 @@
+.proceeding-page {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--color-muted);
+
+  a {
+    color: var(--color-primary);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  span {
+    color: var(--color-muted);
+  }
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+  padding: 1.5rem 1.75rem;
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(90, 59, 231, 0.12), rgba(255, 108, 136, 0.12));
+  border: 1px solid rgba(90, 59, 231, 0.12);
+}
+
+:host ::ng-deep .page-header vc-heading .vc-heading {
+  margin: 0 0 0.35rem;
+  color: var(--color-text);
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+:host ::ng-deep .page-header vc-text .vc-text {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 1rem;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  background: #f4f1ff;
+  color: var(--color-primary);
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.75rem;
+}
+
+.header-tag {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.9rem 1.1rem;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 14px 30px rgba(44, 56, 120, 0.1);
+
+  span {
+    font-size: 0.75rem;
+    color: var(--color-muted);
+  }
+
+  strong {
+    color: var(--color-text);
+  }
+}
+
+.proceeding-layout {
+  row-gap: 2rem;
+}
+
+.page-side {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.side-card {
+  padding: 1.25rem;
+  border-radius: 16px;
+  background: #fff;
+  border: 1px solid rgba(90, 59, 231, 0.1);
+  box-shadow: 0 12px 25px rgba(44, 56, 120, 0.08);
+
+  ul {
+    margin: 0;
+    padding-left: 1rem;
+    color: var(--color-muted);
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  &.accent {
+    background: linear-gradient(150deg, #f4f1ff, #eef6ff);
+    border-color: rgba(90, 196, 255, 0.3);
+  }
+}
+
+:host ::ng-deep vc-card.side-card > .vc-card {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+:host ::ng-deep vc-card.side-card .vc-card__header {
+  margin-bottom: 0.75rem;
+}
+
+:host ::ng-deep vc-card.side-card .vc-card__title {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.success-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.1rem 1.4rem;
+  border-radius: 14px;
+  background: #fff;
+  border: 1px solid rgba(90, 59, 231, 0.12);
+  box-shadow: 0 12px 24px rgba(44, 56, 120, 0.08);
+
+  p {
+    margin: 0.25rem 0 0;
+    color: var(--color-muted);
+  }
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  background: var(--color-primary);
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.catalog-summary {
+  .vc-row {
+    row-gap: 1.5rem;
+  }
+}
+
+.summary-card {
+  height: 100%;
+
+  strong {
+    display: block;
+    font-size: 2rem;
+    color: var(--color-text);
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    margin: 0;
+    color: var(--color-muted);
+  }
+
+  &.accent {
+    --vc-card-bg: linear-gradient(135deg, rgba(90, 59, 231, 0.08), rgba(90, 196, 255, 0.1));
+  }
+}
+
+.catalog-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.section-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+:host ::ng-deep .section-header vc-heading .vc-heading {
+  margin: 0;
+  color: var(--color-text);
+}
+
+:host ::ng-deep .section-header vc-text .vc-text {
+  margin: 0;
+  color: var(--color-muted);
+}
+
+.catalog-card {
+  height: 100%;
+}
+
+:host ::ng-deep vc-card.catalog-card > .vc-card {
+  height: 100%;
+}
+
+:host ::ng-deep vc-list .vc-list {
+  gap: 0.75rem;
+}
+
+@media (max-width: 1100px) {
+  .header-tag {
+    width: 100%;
+  }
+}
+
+@media (max-width: 720px) {
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
