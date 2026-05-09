@@ -1,188 +1,202 @@
 .proceeding-form {
   width: 100%;
-}
 
-.form-fieldset {
-  border: none;
-  margin: 0;
-  padding: 0;
-}
-
-.form-card {
-  background: #fff;
-  border-radius: 20px;
-  padding: 2rem;
-  border: 1px solid rgba(90, 59, 231, 0.12);
-  box-shadow: 0 18px 40px rgba(44, 56, 120, 0.1);
-}
-
-.form-header {
-  margin-bottom: 1.5rem;
-}
-
-:host ::ng-deep .form-header vc-heading .vc-heading {
-  margin: 0 0 0.35rem;
-  color: var(--color-text);
-  font-size: 1.5rem;
-  font-weight: 700;
-  line-height: 1.2;
-}
-
-:host ::ng-deep .form-header vc-text .vc-text {
-  margin: 0;
-  color: var(--color-muted);
-  font-size: 1rem;
-}
-
-.form-grid {
-  row-gap: 1.25rem;
-}
-
-.description-field {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  font-size: 0.9rem;
-  color: var(--color-muted);
-
-  span {
-    font-weight: 600;
-    color: var(--color-text);
+  /* Bloco base do formulário */
+  &__fieldset {
+    border: 0;
+    margin: 0;
+    padding: 0;
   }
 
-  textarea {
+  &__card {
+    background: #fff;
+    border: 1px solid rgba(90, 59, 231, 0.12);
+    border-radius: 20px;
+    box-shadow: 0 18px 40px rgba(44, 56, 120, 0.1);
+    padding: 2rem;
+  }
+
+  /* Cabeçalho do formulário */
+  &__header {
+    margin-bottom: 1.5rem;
+  }
+
+  &__grid {
+    row-gap: 1.25rem;
+  }
+
+  /* Campo de descrição com feedback visual */
+  &__description {
+    color: var(--color-muted);
+    display: flex;
+    flex-direction: column;
+    font-size: 0.9rem;
+    gap: 0.5rem;
+  }
+
+  &__description-label {
+    color: var(--color-text);
+    font-weight: 600;
+  }
+
+  &__description-textarea {
+    background: #fff;
     border: 1px solid rgba(90, 59, 231, 0.2);
     border-radius: 14px;
-    padding: 0.9rem 1rem;
-    font-size: 0.95rem;
-    background: #fff;
     color: var(--color-text);
-    resize: vertical;
+    font-size: 0.95rem;
     min-height: 120px;
+    padding: 0.9rem 1rem;
+    resize: vertical;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 
     &:focus {
-      outline: none;
       border-color: var(--color-primary);
       box-shadow: 0 0 0 3px rgba(90, 59, 231, 0.15);
+      outline: none;
     }
 
-    &.invalid {
+    &--invalid {
       border-color: var(--color-accent);
       box-shadow: 0 0 0 3px rgba(255, 108, 136, 0.18);
     }
   }
 
-  small {
+  &__description-error {
     color: var(--color-accent);
     font-size: 0.75rem;
   }
-}
 
-.toggle-row {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-top: 1.5rem;
-  padding: 1rem;
-  border-radius: 14px;
-  background: #f8f7ff;
-  border: 1px solid rgba(90, 59, 231, 0.12);
-
-  strong {
-    display: block;
-    color: var(--color-text);
+  /* Área de ativação do procedimento */
+  &__toggle {
+    align-items: center;
+    background: #f8f7ff;
+    border: 1px solid rgba(90, 59, 231, 0.12);
+    border-radius: 14px;
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    padding: 1rem;
   }
 
-  p {
-    margin: 0.2rem 0 0;
+  &__toggle-content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__toggle-title {
+    color: var(--color-text);
+    display: block;
+  }
+
+  &__toggle-text {
     color: var(--color-muted);
     font-size: 0.85rem;
-  }
-}
-
-.switch {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  width: 48px;
-  height: 28px;
-
-  input {
-    opacity: 0;
-    width: 0;
-    height: 0;
+    margin: 0.2rem 0 0;
   }
 
-  .slider {
-    position: absolute;
-    inset: 0;
+  /* Switch visual do campo booleano */
+  &__switch {
+    align-items: center;
+    display: inline-flex;
+    height: 28px;
+    position: relative;
+    width: 48px;
+
+    input {
+      height: 0;
+      opacity: 0;
+      width: 0;
+    }
+  }
+
+  &__switch-slider {
     background: rgba(90, 59, 231, 0.2);
     border-radius: 999px;
-    transition: 0.2s ease;
-  }
-
-  .slider::before {
-    content: '';
+    inset: 0;
     position: absolute;
-    height: 22px;
-    width: 22px;
-    left: 3px;
-    bottom: 3px;
-    background: #fff;
-    border-radius: 50%;
-    box-shadow: 0 4px 10px rgba(44, 56, 120, 0.2);
     transition: 0.2s ease;
+
+    &::before {
+      background: #fff;
+      border-radius: 50%;
+      bottom: 3px;
+      box-shadow: 0 4px 10px rgba(44, 56, 120, 0.2);
+      content: '';
+      height: 22px;
+      left: 3px;
+      position: absolute;
+      transition: 0.2s ease;
+      width: 22px;
+    }
   }
 
-  input:checked + .slider {
+  &__switch input:checked + &__switch-slider {
     background: linear-gradient(135deg, #6e4ef5, #5ac4ff);
   }
 
-  input:checked + .slider::before {
+  &__switch input:checked + &__switch-slider::before {
     transform: translateX(20px);
+  }
+
+  /* Rodapé com ações do formulário */
+  &__actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-end;
+    margin-top: 1.75rem;
+  }
+
+  &__error {
+    background: rgba(255, 108, 136, 0.12);
+    border-radius: 12px;
+    color: var(--color-accent);
+    font-weight: 600;
+    margin: 1rem 0 0;
+    padding: 0.75rem 1rem;
   }
 }
 
-.form-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.75rem;
-  margin-top: 1.75rem;
+/* Ajustes visuais dos componentes do design system usados dentro do formulário */
+:host ::ng-deep .proceeding-form__header vc-heading .vc-heading {
+  color: var(--color-text);
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0 0 0.35rem;
 }
 
-:host ::ng-deep .form-actions vc-button .vc-button__inner {
+:host ::ng-deep .proceeding-form__header vc-text .vc-text {
+  color: var(--color-muted);
+  font-size: 1rem;
+  margin: 0;
+}
+
+:host ::ng-deep .proceeding-form__actions vc-button .vc-button__inner {
   border-radius: 999px;
   padding: 0.65rem 1.4rem;
 }
 
-:host ::ng-deep .form-actions vc-button.vc-button--primary .vc-button__inner {
+:host ::ng-deep .proceeding-form__actions vc-button.vc-button--primary .vc-button__inner {
   background: linear-gradient(135deg, #6e4ef5, #5ac4ff);
-  color: #fff;
   box-shadow: 0 10px 20px rgba(90, 59, 231, 0.25);
+  color: #fff;
 }
 
-:host ::ng-deep .form-actions vc-button.vc-button--ghost .vc-button__inner {
+:host ::ng-deep .proceeding-form__actions vc-button.vc-button--ghost .vc-button__inner {
   background: #f4f1ff;
   color: var(--color-primary);
 }
 
-.error-banner {
-  margin: 1rem 0 0;
-  padding: 0.75rem 1rem;
-  border-radius: 12px;
-  background: rgba(255, 108, 136, 0.12);
-  color: var(--color-accent);
-  font-weight: 600;
-}
-
 @media (max-width: 720px) {
-  .form-card {
-    padding: 1.5rem;
-  }
+  .proceeding-form {
+    &__card {
+      padding: 1.5rem;
+    }
 
-  .form-actions {
-    flex-direction: column;
-    align-items: stretch;
+    &__actions {
+      align-items: stretch;
+      flex-direction: column;
+    }
   }
 }

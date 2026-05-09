@@ -27,17 +27,24 @@ import { AestheticProcedurePayload } from '../../models/proceeding.model';
   styleUrl: './proceeding-form.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
+/** Componente responsável por coletar os dados operacionais e comerciais de um procedimento estético. */
 export class ProceedingFormComponent {
+  /** Controla o estado de carregamento externo para bloquear o formulário durante a gravação. */
   @Input() loading = false;
+  /** Exibe mensagens de erro operacionais vindas da página consumidora. */
   @Input() error: string | null = null;
+  /** Emite o payload tipado do procedimento quando o formulário está válido. */
   @Output() formSubmit = new EventEmitter<AestheticProcedurePayload>();
 
+  /** Lista base de categorias usadas pela clínica para padronizar o cadastro. */
   readonly categories = ['Facial', 'Corporal', 'Laser', 'Injetaveis', 'Capilar', 'Bem-estar'];
+  /** Converte as categorias em opções compatíveis com o componente de select do design system. */
   readonly categoryOptions: VcSelectOption[] = this.categories.map((category) => ({
     label: category,
     value: category
   }));
 
+  /** Estrutura reativa central do formulário de cadastro de procedimentos. */
   readonly form: FormGroup<{
     name: FormControl<string>;
     category: FormControl<string>;
@@ -82,6 +89,10 @@ export class ProceedingFormComponent {
     });
   }
 
+  /**
+   * Valida o formulário e, quando consistente, envia o payload completo
+   * para a página responsável pela persistência.
+   */
   onSubmit(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
@@ -91,6 +102,7 @@ export class ProceedingFormComponent {
     this.formSubmit.emit(this.form.getRawValue());
   }
 
+  /** Restaura os valores iniciais para agilizar um novo cadastro manual. */
   resetForm(): void {
     this.form.reset({
       name: '',
