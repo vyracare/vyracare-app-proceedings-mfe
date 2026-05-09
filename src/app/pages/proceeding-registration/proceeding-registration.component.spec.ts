@@ -3,7 +3,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { of, throwError } from 'rxjs';
 import { ProceedingRegistrationPageComponent } from './proceeding-registration.component';
 import { ProceedingService } from '../../services/proceeding.service';
-import { AestheticProcedurePayload } from '../../models/proceeding.model';
+import { AestheticProcedure, AestheticProcedurePayload } from '../../models/proceeding.model';
 
 describe('ProceedingRegistrationPageComponent', () => {
   let proceedingService: jest.Mocked<ProceedingService>;
@@ -33,6 +33,56 @@ describe('ProceedingRegistrationPageComponent', () => {
     fixture.detectChanges();
 
     expect(proceedingService.listProcedures).toHaveBeenCalled();
+  });
+
+  it('should group the catalog by category with formatted description', () => {
+    const seededProcedures: AestheticProcedure[] = [
+      {
+        id: 'laser-1',
+        name: 'Laser facial',
+        category: 'Laser',
+        code: 'LAS-001',
+        targetArea: 'Face',
+        durationMinutes: 40,
+        sessionPrice: 350,
+        sessionCount: 4,
+        recoveryTime: 'Sem afastamento',
+        description: 'Sessao facial.',
+        active: true,
+        createdAt: '2026-05-09T00:00:00.000Z'
+      },
+      {
+        id: 'facial-1',
+        name: 'Peeling leve',
+        category: 'Facial',
+        code: 'FAC-002',
+        targetArea: 'Rosto',
+        durationMinutes: 55,
+        sessionPrice: 280,
+        sessionCount: 3,
+        recoveryTime: '24 horas',
+        description: 'Renovacao leve.',
+        active: false,
+        createdAt: '2026-05-09T00:00:00.000Z'
+      }
+    ];
+
+    proceedingService.listProcedures.mockReturnValue(of(seededProcedures));
+
+    const fixture = TestBed.createComponent(ProceedingRegistrationPageComponent);
+    const component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    const groupedCatalog = (component as any).catalogByCategory();
+
+    expect(groupedCatalog).toHaveLength(2);
+    expect(groupedCatalog[0].category).toBe('Facial');
+    expect(groupedCatalog[0].subtitle).toBe('1 procedimento(s) registrado(s)');
+    expect(groupedCatalog[0].items[0].icon).toBe('pause-circle');
+    expect(groupedCatalog[0].items[0].description).toContain('R$');
+    expect((component as any).categoryCount()).toBe(2);
+    expect((component as any).activeProcedures()).toBe(1);
+    expect((component as any).totalProcedures()).toBe(2);
   });
 
   it('should handle successful procedure registration', () => {

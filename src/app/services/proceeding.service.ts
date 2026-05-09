@@ -1,13 +1,19 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import defaultProceduresMock from '../mock/default-procedures.json';
 import {
   AestheticProcedure,
   AestheticProcedurePayload,
   PROCEEDINGS_STORAGE_KEY
 } from '../models/proceeding.model';
 
-const DEFAULT_PROCEDURES = defaultProceduresMock as AestheticProcedure[];
+type ProceduresMockModule = AestheticProcedure[] | { default: AestheticProcedure[] };
+const defaultProceduresMock = require('../mock/default-procedures.json') as ProceduresMockModule;
+
+const DEFAULT_PROCEDURES = (
+  Array.isArray(defaultProceduresMock)
+    ? defaultProceduresMock
+    : (defaultProceduresMock as ProceduresMockModule).default
+) as AestheticProcedure[];
 
 @Injectable({
   providedIn: 'root'
