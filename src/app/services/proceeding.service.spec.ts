@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { ProceedingService } from './proceeding.service';
-import { AestheticProcedurePayload } from '../models/proceeding.model';
+import { AestheticProcedurePayload, PROCEEDINGS_STORAGE_KEY } from '../models/proceeding.model';
 
 describe('ProceedingService', () => {
   let service: ProceedingService;
@@ -38,6 +38,7 @@ describe('ProceedingService', () => {
 
     service.registerProcedure(payload).subscribe((procedure) => {
       expect(procedure.name).toBe(payload.name);
+      expect(localStorage.getItem(PROCEEDINGS_STORAGE_KEY)).not.toBeNull();
 
       service.listProcedures().subscribe((procedures) => {
         expect(procedures.some((item) => item.code === payload.code)).toBe(true);

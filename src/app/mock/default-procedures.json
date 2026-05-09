@@ -1,0 +1,72 @@
+[
+  {
+    "id": "proc-botox",
+    "name": "Toxina botulinica",
+    "category": "Injetaveis",
+    "code": "INJ-001",
+    "targetArea": "Face",
+    "durationMinutes": 45,
+    "sessionPrice": 950,
+    "sessionCount": 1,
+    "recoveryTime": "24 horas",
+    "description": "Suavizacao de linhas dinamicas e prevencao de rugas de expressao.",
+    "active": true,
+    "createdAt": "2026-05-01T09:00:00.000Z"
+  },
+  {
+    "id": "proc-limpeza-premium",
+    "name": "Limpeza de pele premium",
+    "category": "Facial",
+    "code": "FAC-014",
+    "targetArea": "Rosto e colo",
+    "durationMinutes": 75,
+    "sessionPrice": 280,
+    "sessionCount": 1,
+    "recoveryTime": "Sem afastamento",
+    "description": "Higienizacao profunda com extracao, mascara calmante e finalizacao antioxidante.",
+    "active": true,
+    "createdAt": "2026-05-02T10:30:00.000Z"
+  },
+  {
+    "id": "proc-crio-abdomen",
+    "name": "Criolipolise de abdomen",
+    "category": "Corporal",
+    "code": "COR-031",
+    "targetArea": "Abdomen",
+    "durationMinutes": 90,
+    "sessionPrice": 1290,
+    "sessionCount": 1,
+    "recoveryTime": "48 horas",
+    "description": "Reducao de gordura localizada com protocolo de acompanhamento fotografico.",
+    "active": true,
+    "createdAt": "2026-05-03T14:15:00.000Z"
+  },
+  {
+    "id": "proc-laser-axila",
+    "name": "Depilacao a laser axilas",
+    "category": "Laser",
+    "code": "LAS-008",
+    "targetArea": "Axilas",
+    "durationMinutes": 30,
+    "sessionPrice": 180,
+    "sessionCount": 8,
+    "recoveryTime": "Sem afastamento",
+    "description": "Plano padrao para reducao progressiva dos pelos com reavaliacao a cada duas sessoes.",
+    "active": true,
+    "createdAt": "2026-05-04T13:00:00.000Z"
+  },
+  {
+    "id": "proc-capilar-led",
+    "name": "Terapia capilar com LED",
+    "category": "Capilar",
+    "code": "CAP-005",
+    "targetArea": "Couro cabeludo",
+    "durationMinutes": 50,
+    "sessionPrice": 240,
+    "sessionCount": 6,
+    "recoveryTime": "Sem afastamento",
+    "description": "Estimulo de crescimento com protocolo combinado de higienizacao e fotobiomodulacao.",
+    "active": false,
+    "createdAt": "2026-05-05T11:45:00.000Z"
+  }
+]

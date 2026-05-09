@@ -1,23 +1,23 @@
 <section class="proceeding-page">
-  <nav class="breadcrumb">
+  <nav class="proceeding-page__breadcrumb">
     <a routerLink="/dashboard">Dashboard</a>
     <span>/</span>
     <span>Cadastro de procedimentos</span>
   </nav>
 
-  <header class="page-header">
-    <div>
-      <span class="eyebrow">Catalogo estetico</span>
+  <header class="proceeding-page__header">
+    <div class="proceeding-page__header-content">
+      <span class="proceeding-page__eyebrow">Catalogo estetico</span>
       <vc-heading [level]="1">Cadastro de procedimentos esteticos</vc-heading>
       <vc-text [muted]="true">Organize tratamentos, protocolos, categorias e valores para todas as unidades da empresa.</vc-text>
     </div>
-    <div class="header-tag">
+    <div class="proceeding-page__header-tag">
       <span>Operacao padronizada</span>
       <strong>Oferta consistente</strong>
     </div>
   </header>
 
-  <div class="vc-row proceeding-layout">
+  <div class="vc-row proceeding-page__layout">
     <div class="vc-col-12 vc-col-xl-8">
       <vyracare-proceeding-form
         [loading]="loading()"
@@ -27,14 +27,14 @@
     </div>
 
     <div class="vc-col-12 vc-col-xl-4">
-      <aside class="page-side">
-        <vc-card class="side-card" title="Categorias da empresa">
+      <aside class="proceeding-page__side">
+        <vc-card class="proceeding-page__side-card" title="Categorias da empresa">
           <ul>
             <li *ngFor="let category of categoryHighlights">{{ category }}</li>
           </ul>
         </vc-card>
 
-        <vc-card class="side-card accent" title="Boas praticas de cadastro">
+        <vc-card class="proceeding-page__side-card proceeding-page__side-card--accent" title="Boas praticas de cadastro">
           <ul>
             <li>Use codigos internos unicos por protocolo.</li>
             <li>Separe facial, corporal, laser e injetaveis por categoria.</li>
@@ -45,30 +45,33 @@
     </div>
   </div>
 
-  <div class="success-card" *ngIf="success()">
-    <span class="badge">Concluido</span>
+  <div class="proceeding-page__success" *ngIf="success()">
+    <span class="proceeding-page__badge">Concluido</span>
     <div>
       <strong>Procedimento salvo</strong>
       <p>O catalogo foi atualizado e ja pode ser utilizado pela equipe comercial e operacional.</p>
     </div>
   </div>
 
-  <section class="catalog-summary">
+  <section class="proceeding-page__summary">
     <div class="vc-row">
       <div class="vc-col-12 vc-col-md-4">
-        <vc-card class="summary-card" title="Procedimentos registrados">
+        <vc-card class="proceeding-page__summary-card" title="Procedimentos registrados">
           <strong>{{ totalProcedures() }}</strong>
           <p>Itens disponiveis no catalogo corporativo.</p>
         </vc-card>
       </div>
       <div class="vc-col-12 vc-col-md-4">
-        <vc-card class="summary-card" title="Procedimentos ativos">
+        <vc-card class="proceeding-page__summary-card" title="Procedimentos ativos">
           <strong>{{ activeProcedures() }}</strong>
           <p>Protocolos liberados para venda imediata.</p>
         </vc-card>
       </div>
       <div class="vc-col-12 vc-col-md-4">
-        <vc-card class="summary-card accent" title="Categorias mapeadas">
+        <vc-card
+          class="proceeding-page__summary-card proceeding-page__summary-card--accent"
+          title="Categorias mapeadas"
+        >
           <strong>{{ categoryCount() }}</strong>
           <p>Frentes de atendimento cobertas pela operacao.</p>
         </vc-card>
@@ -76,15 +79,15 @@
     </div>
   </section>
 
-  <section class="catalog-section">
-    <div class="section-header">
+  <section class="proceeding-page__catalog">
+    <div class="proceeding-page__section-header">
       <vc-heading [level]="2">Catalogo de procedimentos</vc-heading>
       <vc-text [muted]="true">Visualize os itens por categoria para revisar precos, foco clinico e cobertura do portfolio.</vc-text>
     </div>
 
     <div class="vc-row">
       <div class="vc-col-12 vc-col-lg-6" *ngFor="let group of catalogByCategory()">
-        <vc-card class="catalog-card" [title]="group.category" [subtitle]="group.subtitle">
+        <vc-card class="proceeding-page__catalog-card" [title]="group.category" [subtitle]="group.subtitle">
           <vc-list [items]="group.items"></vc-list>
         </vc-card>
       </div>
