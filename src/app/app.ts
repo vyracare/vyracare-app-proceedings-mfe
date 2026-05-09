@@ -10,5 +10,5 @@ import { VcHeadingComponent, VcTextComponent } from '@vyracare/design-system';
   styleUrl: './app.scss'
 })
 export class App {
-  protected readonly title = signal('[name-generic]');
+  protected readonly title = signal('vyracare-app-proceedings-mfe');
 }

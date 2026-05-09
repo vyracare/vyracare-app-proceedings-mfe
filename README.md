@@ -1,3 +1,3 @@
-# [name-generic]
+# vyracare-app-proceedings-mfe
 
-Repositório [name-generic]
+Repositório vyracare-app-proceedings-mfe

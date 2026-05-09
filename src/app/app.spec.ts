@@ -18,6 +18,6 @@ describe('App', () => {
     const fixture = TestBed.createComponent(App);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.textContent).toContain('[name-generic]');
+    expect(compiled.textContent).toContain('vyracare-app-proceedings-mfe');
   });
 });
