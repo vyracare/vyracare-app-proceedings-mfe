@@ -35,9 +35,9 @@ describe('ProceedingService', () => {
   });
 
   it('should return the seeded catalog when there is no local data', (done) => {
-    service.listProcedures().subscribe((procedures) => {
-      expect(procedures.length).toBeGreaterThan(0);
-      expect(procedures[0]).toHaveProperty('category');
+    service.listProceedings().subscribe((proceedings) => {
+      expect(proceedings.length).toBeGreaterThan(0);
+      expect(proceedings[0]).toHaveProperty('category');
       done();
     });
   });
@@ -60,8 +60,8 @@ describe('ProceedingService', () => {
       expect(procedure.name).toBe(payload.name);
       expect(localStorage.getItem(PROCEEDINGS_STORAGE_KEY)).not.toBeNull();
 
-      service.listProcedures().subscribe((procedures) => {
-        expect(procedures.some((item) => item.code === payload.code)).toBe(true);
+      service.listProceedings().subscribe((proceedings) => {
+        expect(proceedings.some((item) => item.code === payload.code)).toBe(true);
         done();
       });
     });
@@ -73,27 +73,27 @@ describe('ProceedingService', () => {
       value: undefined
     });
 
-    const procedures = (service as any).readProcedures() as AestheticProcedure[];
+    const proceedings = (service as any).readProceedings() as AestheticProcedure[];
 
-    expect(procedures.length).toBeGreaterThan(0);
-    expect(procedures[0].id).toBeDefined();
+    expect(proceedings.length).toBeGreaterThan(0);
+    expect(proceedings[0].id).toBeDefined();
   });
 
   it('should fallback to the mock catalog when persisted data is invalid', () => {
     localStorage.setItem(PROCEEDINGS_STORAGE_KEY, 'not-a-json');
 
-    const procedures = (service as any).readProcedures() as AestheticProcedure[];
+    const proceedings = (service as any).readProceedings() as AestheticProcedure[];
 
-    expect(procedures.length).toBeGreaterThan(0);
-    expect(procedures[0].category).toBeDefined();
+    expect(proceedings.length).toBeGreaterThan(0);
+    expect(proceedings[0].category).toBeDefined();
   });
 
   it('should fallback to the mock catalog when persisted data is empty', () => {
     localStorage.setItem(PROCEEDINGS_STORAGE_KEY, JSON.stringify([]));
 
-    const procedures = (service as any).readProcedures() as AestheticProcedure[];
+    const proceedings = (service as any).readProceedings() as AestheticProcedure[];
 
-    expect(procedures.length).toBeGreaterThan(0);
+    expect(proceedings.length).toBeGreaterThan(0);
   });
 
   it('should ignore writes when localStorage is unavailable', () => {
@@ -102,7 +102,7 @@ describe('ProceedingService', () => {
       value: undefined
     });
 
-    expect(() => (service as any).writeProcedures([])).not.toThrow();
+    expect(() => (service as any).writeProceedings([])).not.toThrow();
   });
 
   it('should generate a fallback id when crypto randomUUID is unavailable', () => {

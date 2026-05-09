@@ -10,11 +10,11 @@ describe('ProceedingRegistrationPageComponent', () => {
 
   beforeEach(async () => {
     proceedingService = {
-      listProcedures: jest.fn(),
+      listProceedings: jest.fn(),
       registerProcedure: jest.fn()
     } as unknown as jest.Mocked<ProceedingService>;
 
-    proceedingService.listProcedures.mockReturnValue(of([]));
+    proceedingService.listProceedings.mockReturnValue(of([]));
 
     await TestBed.configureTestingModule({
       imports: [ProceedingRegistrationPageComponent, RouterTestingModule],
@@ -32,11 +32,11 @@ describe('ProceedingRegistrationPageComponent', () => {
     const fixture = TestBed.createComponent(ProceedingRegistrationPageComponent);
     fixture.detectChanges();
 
-    expect(proceedingService.listProcedures).toHaveBeenCalled();
+    expect(proceedingService.listProceedings).toHaveBeenCalled();
   });
 
   it('should group the catalog by category with formatted description', () => {
-    const seededProcedures: AestheticProcedure[] = [
+    const seededProceedings: AestheticProcedure[] = [
       {
         id: 'laser-1',
         name: 'Laser facial',
@@ -67,7 +67,7 @@ describe('ProceedingRegistrationPageComponent', () => {
       }
     ];
 
-    proceedingService.listProcedures.mockReturnValue(of(seededProcedures));
+    proceedingService.listProceedings.mockReturnValue(of(seededProceedings));
 
     const fixture = TestBed.createComponent(ProceedingRegistrationPageComponent);
     const component = fixture.componentInstance;
@@ -81,8 +81,8 @@ describe('ProceedingRegistrationPageComponent', () => {
     expect(groupedCatalog[0].items[0].icon).toBe('pause-circle');
     expect(groupedCatalog[0].items[0].description).toContain('R$');
     expect((component as any).categoryCount()).toBe(2);
-    expect((component as any).activeProcedures()).toBe(1);
-    expect((component as any).totalProcedures()).toBe(2);
+    expect((component as any).activeProceedings()).toBe(1);
+    expect((component as any).totalProceedings()).toBe(2);
   });
 
   it('should handle successful procedure registration', () => {

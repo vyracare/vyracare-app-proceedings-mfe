@@ -6,14 +6,18 @@ import {
   PROCEEDINGS_STORAGE_KEY
 } from '../models/proceeding.model';
 
-type ProceduresMockModule = AestheticProcedure[] | { default: AestheticProcedure[] };
-const defaultProceduresMock = require('../mock/default-procedures.json') as ProceduresMockModule;
+type ProceedingsMockModule = AestheticProcedure[] | { default: AestheticProcedure[] };
 
-const DEFAULT_PROCEDURES = (
-  Array.isArray(defaultProceduresMock)
-    ? defaultProceduresMock
-    : (defaultProceduresMock as ProceduresMockModule).default
-) as AestheticProcedure[];
+const defaultProceedingsMock = require('../mock/default-procedures.json') as ProceedingsMockModule;
+const DEFAULT_PROCEEDINGS = normalizeProceedingsMock(defaultProceedingsMock);
+
+function normalizeProceedingsMock(mockModule: ProceedingsMockModule): AestheticProcedure[] {
+  if (Array.isArray(mockModule)) {
+    return mockModule;
+  }
+
+  return 'default' in mockModule ? mockModule.default : [];
+}
 
 @Injectable({
   providedIn: 'root'
@@ -21,8 +25,8 @@ const DEFAULT_PROCEDURES = (
 /** Serviço responsável por ler e persistir o catálogo local de procedimentos estéticos do MFE. */
 export class ProceedingService {
   /** Retorna o catálogo completo disponível no armazenamento local ou no mock inicial. */
-  listProcedures(): Observable<AestheticProcedure[]> {
-    return of(this.readProcedures());
+  listProceedings(): Observable<AestheticProcedure[]> {
+    return of(this.readProceedings());
   }
 
   /**
@@ -30,47 +34,47 @@ export class ProceedingService {
    * mínimos necessários para que ele possa ser exibido na listagem.
    */
   registerProcedure(payload: AestheticProcedurePayload): Observable<AestheticProcedure> {
-    const storedProcedures = this.readProcedures();
-    const procedure: AestheticProcedure = {
+    const storedProceedings = this.readProceedings();
+    const proceeding: AestheticProcedure = {
       ...payload,
       id: this.generateId(payload.code),
       createdAt: new Date().toISOString()
     };
 
-    const nextProcedures = [procedure, ...storedProcedures];
-    this.writeProcedures(nextProcedures);
-    return of(procedure);
+    const nextProceedings = [proceeding, ...storedProceedings];
+    this.writeProceedings(nextProceedings);
+    return of(proceeding);
   }
 
   /**
    * Lê o catálogo persistido. Quando não houver `localStorage` disponível
    * ou os dados estiverem ausentes/inválidos, utiliza o mock padrão do projeto.
    */
-  private readProcedures(): AestheticProcedure[] {
+  private readProceedings(): AestheticProcedure[] {
     if (typeof globalThis.localStorage === 'undefined') {
-      return [...DEFAULT_PROCEDURES];
+      return [...DEFAULT_PROCEEDINGS];
     }
 
     const storedValue = globalThis.localStorage.getItem(PROCEEDINGS_STORAGE_KEY);
     if (!storedValue) {
-      return [...DEFAULT_PROCEDURES];
+      return [...DEFAULT_PROCEEDINGS];
     }
 
     try {
       const parsedValue = JSON.parse(storedValue) as AestheticProcedure[];
-      return Array.isArray(parsedValue) && parsedValue.length > 0 ? parsedValue : [...DEFAULT_PROCEDURES];
+      return Array.isArray(parsedValue) && parsedValue.length > 0 ? parsedValue : [...DEFAULT_PROCEEDINGS];
     } catch {
-      return [...DEFAULT_PROCEDURES];
+      return [...DEFAULT_PROCEEDINGS];
     }
   }
 
   /** Persiste o catálogo serializado no `localStorage` para manter o estado entre recargas. */
-  private writeProcedures(procedures: AestheticProcedure[]): void {
+  private writeProceedings(proceedings: AestheticProcedure[]): void {
     if (typeof globalThis.localStorage === 'undefined') {
       return;
     }
 
-    globalThis.localStorage.setItem(PROCEEDINGS_STORAGE_KEY, JSON.stringify(procedures));
+    globalThis.localStorage.setItem(PROCEEDINGS_STORAGE_KEY, JSON.stringify(proceedings));
   }
 
   /** Gera um identificador estável para novos procedimentos, usando UUID quando disponível. */
