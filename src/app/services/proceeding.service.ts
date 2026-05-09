@@ -12,11 +12,17 @@ const DEFAULT_PROCEDURES = defaultProceduresMock as AestheticProcedure[];
 @Injectable({
   providedIn: 'root'
 })
+/** Serviço responsável por ler e persistir o catálogo local de procedimentos estéticos do MFE. */
 export class ProceedingService {
+  /** Retorna o catálogo completo disponível no armazenamento local ou no mock inicial. */
   listProcedures(): Observable<AestheticProcedure[]> {
     return of(this.readProcedures());
   }
 
+  /**
+   * Registra um novo procedimento no catálogo local, gerando os metadados
+   * mínimos necessários para que ele possa ser exibido na listagem.
+   */
   registerProcedure(payload: AestheticProcedurePayload): Observable<AestheticProcedure> {
     const storedProcedures = this.readProcedures();
     const procedure: AestheticProcedure = {
@@ -30,6 +36,10 @@ export class ProceedingService {
     return of(procedure);
   }
 
+  /**
+   * Lê o catálogo persistido. Quando não houver `localStorage` disponível
+   * ou os dados estiverem ausentes/inválidos, utiliza o mock padrão do projeto.
+   */
   private readProcedures(): AestheticProcedure[] {
     if (typeof globalThis.localStorage === 'undefined') {
       return [...DEFAULT_PROCEDURES];
@@ -48,6 +58,7 @@ export class ProceedingService {
     }
   }
 
+  /** Persiste o catálogo serializado no `localStorage` para manter o estado entre recargas. */
   private writeProcedures(procedures: AestheticProcedure[]): void {
     if (typeof globalThis.localStorage === 'undefined') {
       return;
@@ -56,6 +67,7 @@ export class ProceedingService {
     globalThis.localStorage.setItem(PROCEEDINGS_STORAGE_KEY, JSON.stringify(procedures));
   }
 
+  /** Gera um identificador estável para novos procedimentos, usando UUID quando disponível. */
   private generateId(code: string): string {
     if (typeof globalThis.crypto !== 'undefined' && 'randomUUID' in globalThis.crypto) {
       return globalThis.crypto.randomUUID();
