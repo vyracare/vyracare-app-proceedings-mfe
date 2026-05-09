@@ -1,12 +1,12 @@
 <form class="proceeding-form" [formGroup]="form" (ngSubmit)="onSubmit()">
-  <fieldset [disabled]="loading" class="form-fieldset">
-    <div class="form-card">
-      <div class="form-header">
+  <fieldset [disabled]="loading" class="proceeding-form__fieldset">
+    <div class="proceeding-form__card">
+      <div class="proceeding-form__header">
         <vc-heading [level]="2">Configuracao do procedimento</vc-heading>
         <vc-text [muted]="true">Defina categoria, duracao, preco e orientacoes para padronizar a oferta da clinica.</vc-text>
       </div>
 
-      <div class="vc-row form-grid">
+      <div class="vc-row proceeding-form__grid">
         <div class="vc-col-12 vc-col-md-6">
           <vc-input
             id="procedure-name"
@@ -103,41 +103,47 @@
         </div>
 
         <div class="vc-col-12">
-          <label class="description-field" for="procedure-description">
-            <span>Descricao comercial</span>
+          <label class="proceeding-form__description" for="procedure-description">
+            <span class="proceeding-form__description-label">Descricao comercial</span>
             <textarea
               id="procedure-description"
               rows="4"
               placeholder="Explique o beneficio principal, protocolo e observacoes para a equipe."
               formControlName="description"
-              [class.invalid]="form.controls.description.touched && form.controls.description.invalid"
+              [class.proceeding-form__description-textarea--invalid]="
+                form.controls.description.touched && form.controls.description.invalid
+              "
+              class="proceeding-form__description-textarea"
             ></textarea>
-            <small *ngIf="form.controls.description.touched && form.controls.description.invalid">
+            <small
+              class="proceeding-form__description-error"
+              *ngIf="form.controls.description.touched && form.controls.description.invalid"
+            >
               Informe uma descricao com pelo menos 10 caracteres.
             </small>
           </label>
         </div>
       </div>
 
-      <div class="toggle-row">
-        <label class="switch">
+      <div class="proceeding-form__toggle">
+        <label class="proceeding-form__switch">
           <input type="checkbox" formControlName="active" />
-          <span class="slider"></span>
+          <span class="proceeding-form__switch-slider"></span>
         </label>
-        <div>
-          <strong>Disponivel para venda</strong>
-          <p>Quando ativo, o procedimento pode ser utilizado na tabela da empresa.</p>
+        <div class="proceeding-form__toggle-content">
+          <strong class="proceeding-form__toggle-title">Disponivel para venda</strong>
+          <p class="proceeding-form__toggle-text">Quando ativo, o procedimento pode ser utilizado na tabela da empresa.</p>
         </div>
       </div>
 
-      <div class="form-actions">
+      <div class="proceeding-form__actions">
         <vc-button type="button" variant="ghost" (click)="resetForm()">Limpar</vc-button>
         <vc-button type="submit" [loading]="loading" [disabled]="loading">
           {{ loading ? 'Salvando...' : 'Salvar procedimento' }}
         </vc-button>
       </div>
 
-      <p class="error-banner" *ngIf="error">{{ error }}</p>
+      <p class="proceeding-form__error" *ngIf="error">{{ error }}</p>
     </div>
   </fieldset>
 </form>

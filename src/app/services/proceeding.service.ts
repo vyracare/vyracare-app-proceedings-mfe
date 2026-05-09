@@ -1,129 +1,83 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { AestheticProcedure, AestheticProcedurePayload } from '../models/proceeding.model';
+import {
+  AestheticProcedure,
+  AestheticProcedurePayload,
+  PROCEEDINGS_STORAGE_KEY
+} from '../models/proceeding.model';
 
-const STORAGE_KEY = 'vyracare_app_proceedings_mfe_catalog';
+type ProceedingsMockModule = AestheticProcedure[] | { default: AestheticProcedure[] };
 
-const DEFAULT_PROCEDURES: AestheticProcedure[] = [
-  {
-    id: 'proc-botox',
-    name: 'Toxina botulinica',
-    category: 'Injetaveis',
-    code: 'INJ-001',
-    targetArea: 'Face',
-    durationMinutes: 45,
-    sessionPrice: 950,
-    sessionCount: 1,
-    recoveryTime: '24 horas',
-    description: 'Suavizacao de linhas dinamicas e prevencao de rugas de expressao.',
-    active: true,
-    createdAt: '2026-05-01T09:00:00.000Z'
-  },
-  {
-    id: 'proc-limpeza-premium',
-    name: 'Limpeza de pele premium',
-    category: 'Facial',
-    code: 'FAC-014',
-    targetArea: 'Rosto e colo',
-    durationMinutes: 75,
-    sessionPrice: 280,
-    sessionCount: 1,
-    recoveryTime: 'Sem afastamento',
-    description: 'Higienizacao profunda com extracao, mascara calmante e finalizacao antioxidante.',
-    active: true,
-    createdAt: '2026-05-02T10:30:00.000Z'
-  },
-  {
-    id: 'proc-crio-abdomen',
-    name: 'Criolipolise de abdomen',
-    category: 'Corporal',
-    code: 'COR-031',
-    targetArea: 'Abdomen',
-    durationMinutes: 90,
-    sessionPrice: 1290,
-    sessionCount: 1,
-    recoveryTime: '48 horas',
-    description: 'Reducao de gordura localizada com protocolo de acompanhamento fotografico.',
-    active: true,
-    createdAt: '2026-05-03T14:15:00.000Z'
-  },
-  {
-    id: 'proc-laser-axila',
-    name: 'Depilacao a laser axilas',
-    category: 'Laser',
-    code: 'LAS-008',
-    targetArea: 'Axilas',
-    durationMinutes: 30,
-    sessionPrice: 180,
-    sessionCount: 8,
-    recoveryTime: 'Sem afastamento',
-    description: 'Plano padrao para reducao progressiva dos pelos com reavaliacao a cada duas sessoes.',
-    active: true,
-    createdAt: '2026-05-04T13:00:00.000Z'
-  },
-  {
-    id: 'proc-capilar-led',
-    name: 'Terapia capilar com LED',
-    category: 'Capilar',
-    code: 'CAP-005',
-    targetArea: 'Couro cabeludo',
-    durationMinutes: 50,
-    sessionPrice: 240,
-    sessionCount: 6,
-    recoveryTime: 'Sem afastamento',
-    description: 'Estimulo de crescimento com protocolo combinado de higienizacao e fotobiomodulacao.',
-    active: false,
-    createdAt: '2026-05-05T11:45:00.000Z'
+const defaultProceedingsMock = require('../mock/default-procedures.json') as ProceedingsMockModule;
+const DEFAULT_PROCEEDINGS = normalizeProceedingsMock(defaultProceedingsMock);
+
+function normalizeProceedingsMock(mockModule: ProceedingsMockModule): AestheticProcedure[] {
+  if (Array.isArray(mockModule)) {
+    return mockModule;
   }
-];
+
+  return 'default' in mockModule ? mockModule.default : [];
+}
 
 @Injectable({
   providedIn: 'root'
 })
+/** Serviço responsável por ler e persistir o catálogo local de procedimentos estéticos do MFE. */
 export class ProceedingService {
-  listProcedures(): Observable<AestheticProcedure[]> {
-    return of(this.readProcedures());
+  /** Retorna o catálogo completo disponível no armazenamento local ou no mock inicial. */
+  listProceedings(): Observable<AestheticProcedure[]> {
+    return of(this.readProceedings());
   }
 
+  /**
+   * Registra um novo procedimento no catálogo local, gerando os metadados
+   * mínimos necessários para que ele possa ser exibido na listagem.
+   */
   registerProcedure(payload: AestheticProcedurePayload): Observable<AestheticProcedure> {
-    const storedProcedures = this.readProcedures();
-    const procedure: AestheticProcedure = {
+    const storedProceedings = this.readProceedings();
+    const proceeding: AestheticProcedure = {
       ...payload,
       id: this.generateId(payload.code),
       createdAt: new Date().toISOString()
     };
 
-    const nextProcedures = [procedure, ...storedProcedures];
-    this.writeProcedures(nextProcedures);
-    return of(procedure);
+    const nextProceedings = [proceeding, ...storedProceedings];
+    this.writeProceedings(nextProceedings);
+    return of(proceeding);
   }
 
-  private readProcedures(): AestheticProcedure[] {
+  /**
+   * Lê o catálogo persistido. Quando não houver `localStorage` disponível
+   * ou os dados estiverem ausentes/inválidos, utiliza o mock padrão do projeto.
+   */
+  private readProceedings(): AestheticProcedure[] {
     if (typeof globalThis.localStorage === 'undefined') {
-      return [...DEFAULT_PROCEDURES];
+      return [...DEFAULT_PROCEEDINGS];
     }
 
-    const storedValue = globalThis.localStorage.getItem(STORAGE_KEY);
+    const storedValue = globalThis.localStorage.getItem(PROCEEDINGS_STORAGE_KEY);
     if (!storedValue) {
-      return [...DEFAULT_PROCEDURES];
+      return [...DEFAULT_PROCEEDINGS];
     }
 
     try {
       const parsedValue = JSON.parse(storedValue) as AestheticProcedure[];
-      return Array.isArray(parsedValue) && parsedValue.length > 0 ? parsedValue : [...DEFAULT_PROCEDURES];
+      return Array.isArray(parsedValue) && parsedValue.length > 0 ? parsedValue : [...DEFAULT_PROCEEDINGS];
     } catch {
-      return [...DEFAULT_PROCEDURES];
+      return [...DEFAULT_PROCEEDINGS];
     }
   }
 
-  private writeProcedures(procedures: AestheticProcedure[]): void {
+  /** Persiste o catálogo serializado no `localStorage` para manter o estado entre recargas. */
+  private writeProceedings(proceedings: AestheticProcedure[]): void {
     if (typeof globalThis.localStorage === 'undefined') {
       return;
     }
 
-    globalThis.localStorage.setItem(STORAGE_KEY, JSON.stringify(procedures));
+    globalThis.localStorage.setItem(PROCEEDINGS_STORAGE_KEY, JSON.stringify(proceedings));
   }
 
+  /** Gera um identificador estável para novos procedimentos, usando UUID quando disponível. */
   private generateId(code: string): string {
     if (typeof globalThis.crypto !== 'undefined' && 'randomUUID' in globalThis.crypto) {
       return globalThis.crypto.randomUUID();

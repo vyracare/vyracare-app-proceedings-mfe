@@ -1,3 +1,7 @@
+import type { VcListItem } from '@vyracare/design-system';
+
+export const PROCEEDINGS_STORAGE_KEY = 'vyracare_app_proceedings_mfe_catalog';
+
 export interface AestheticProcedurePayload {
   name: string;
   category: string;
@@ -14,4 +18,10 @@ export interface AestheticProcedurePayload {
 export interface AestheticProcedure extends AestheticProcedurePayload {
   id: string;
   createdAt: string;
+}
+
+export interface ProcedureCategorySummary {
+  category: string;
+  subtitle: string;
+  items: VcListItem[];
 }
