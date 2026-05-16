@@ -2,8 +2,9 @@
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  width: 100%;
 
-  /* Navegação contextual da página */
+  /* Navegacao contextual da pagina */
   &__breadcrumb {
     align-items: center;
     color: var(--color-muted);
@@ -22,7 +23,7 @@
     }
   }
 
-  /* Bloco principal de apresentação */
+  /* Hero principal da tela */
   &__header {
     align-items: center;
     background: linear-gradient(135deg, rgba(90, 59, 231, 0.12), rgba(255, 108, 136, 0.12));
@@ -37,20 +38,20 @@
   &__header-content {
     display: flex;
     flex-direction: column;
+    gap: 0.35rem;
   }
 
   &__eyebrow {
     align-items: center;
-    background: #f4f1ff;
+    background: rgba(255, 255, 255, 0.75);
     border-radius: 999px;
     color: var(--color-primary);
     display: inline-flex;
     font-size: 0.75rem;
-    font-weight: 600;
-    gap: 0.5rem;
+    font-weight: 700;
     letter-spacing: 0.08em;
-    margin-bottom: 0.75rem;
-    padding: 0.35rem 0.75rem;
+    margin-bottom: 0.45rem;
+    padding: 0.35rem 0.8rem;
     text-transform: uppercase;
   }
 
@@ -60,8 +61,9 @@
     box-shadow: 0 14px 30px rgba(44, 56, 120, 0.1);
     display: flex;
     flex-direction: column;
+    flex-shrink: 0;
     gap: 0.25rem;
-    padding: 0.9rem 1.1rem;
+    padding: 0.95rem 1.15rem;
 
     span {
       color: var(--color-muted);
@@ -73,8 +75,8 @@
     }
   }
 
-  /* Estrutura em grid da área principal */
-  &__layout {
+  /* Workspace principal com formulario e trilha operacional */
+  &__workspace-grid {
     row-gap: 2rem;
   }
 
@@ -82,30 +84,10 @@
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+    height: 100%;
   }
 
-  &__side-card {
-    background: #fff;
-    border: 1px solid rgba(90, 59, 231, 0.1);
-    border-radius: 16px;
-    box-shadow: 0 12px 25px rgba(44, 56, 120, 0.08);
-    padding: 1.25rem;
-
-    ul {
-      color: var(--color-muted);
-      display: grid;
-      gap: 0.6rem;
-      margin: 0;
-      padding-left: 1rem;
-    }
-
-    &--accent {
-      background: linear-gradient(150deg, #f4f1ff, #eef6ff);
-      border-color: rgba(90, 196, 255, 0.3);
-    }
-  }
-
-  /* Feedback de sucesso após o cadastro */
+  /* Feedback de sucesso */
   &__success {
     align-items: center;
     background: #fff;
@@ -129,18 +111,20 @@
     color: #fff;
     display: inline-flex;
     font-size: 0.75rem;
-    font-weight: 600;
+    font-weight: 700;
     justify-content: center;
     letter-spacing: 0.08em;
     padding: 0.3rem 0.75rem;
     text-transform: uppercase;
   }
 
-  /* Cards de indicadores do catálogo */
+  /* Bloco lateral de indicadores */
   &__summary {
-    .vc-row {
-      row-gap: 1.5rem;
-    }
+    width: 100%;
+  }
+
+  &__summary-grid {
+    row-gap: 1rem;
   }
 
   &__summary-card {
@@ -163,7 +147,54 @@
     }
   }
 
-  /* Seção de listagem do catálogo */
+  /* Card lateral com diretrizes */
+  &__side-card {
+    background: #fff;
+    border: 1px solid rgba(90, 59, 231, 0.1);
+    border-radius: 16px;
+    box-shadow: 0 12px 25px rgba(44, 56, 120, 0.08);
+    padding: 1.25rem;
+
+    &--accent {
+      background: linear-gradient(150deg, #f4f1ff, #eef6ff);
+      border-color: rgba(90, 196, 255, 0.3);
+    }
+  }
+
+  &__category-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+  }
+
+  &__category-tag {
+    align-items: center;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(90, 59, 231, 0.12);
+    border-radius: 999px;
+    color: var(--color-primary);
+    display: inline-flex;
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 0.45rem 0.85rem;
+  }
+
+  &__side-divider {
+    background: rgba(90, 59, 231, 0.12);
+    height: 1px;
+    margin: 1.25rem 0;
+    width: 100%;
+  }
+
+  &__practice-list {
+    color: var(--color-muted);
+    display: grid;
+    gap: 0.7rem;
+    margin: 0;
+    padding-left: 1rem;
+  }
+
+  /* Catalogo por categoria */
   &__catalog {
     display: flex;
     flex-direction: column;
@@ -176,18 +207,22 @@
     gap: 0.35rem;
   }
 
+  &__catalog-grid {
+    row-gap: 1.5rem;
+  }
+
   &__catalog-card {
     height: 100%;
   }
 }
 
-/* Overrides dos componentes do design system usados na página */
+/* Overrides dos componentes do design system usados na pagina */
 :host ::ng-deep .proceeding-page__header vc-heading .vc-heading {
   color: var(--color-text);
   font-size: 2rem;
   font-weight: 700;
   line-height: 1.2;
-  margin: 0 0 0.35rem;
+  margin: 0;
 }
 
 :host ::ng-deep .proceeding-page__header vc-text .vc-text {
@@ -234,6 +269,15 @@
   gap: 0.75rem;
 }
 
+@media (min-width: 1400px) {
+  .proceeding-page {
+    &__side {
+      position: sticky;
+      top: 1.5rem;
+    }
+  }
+}
+
 @media (max-width: 1100px) {
   .proceeding-page {
     &__header-tag {
@@ -245,6 +289,11 @@
 @media (max-width: 720px) {
   .proceeding-page {
     &__header {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    &__success {
       align-items: flex-start;
       flex-direction: column;
     }
