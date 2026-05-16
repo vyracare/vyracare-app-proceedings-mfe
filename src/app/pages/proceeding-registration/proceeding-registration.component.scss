@@ -109,7 +109,10 @@
 
   /* Grid principal */
   &__workspace-grid {
+    margin-left: 0;
+    margin-right: 0;
     row-gap: 2rem;
+    width: 100%;
   }
 
   &__side {
@@ -209,7 +212,10 @@
   }
 
   &__catalog-grid {
+    margin-left: 0;
+    margin-right: 0;
     row-gap: 1rem;
+    width: 100%;
   }
 
   &__catalog-card {
@@ -284,8 +290,7 @@
     }
 
     &__side {
-      position: sticky;
-      top: 1.5rem;
+      min-width: 0;
     }
   }
 }
