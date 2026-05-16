@@ -268,8 +268,21 @@
   gap: 0.75rem;
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 992px) {
   .proceeding-page {
+    &__workspace-grid {
+      display: grid;
+      gap: 2rem;
+      grid-template-columns: minmax(0, 1.55fr) minmax(320px, 0.95fr);
+
+      > [class*='vc-col-'] {
+        max-width: none;
+        padding-left: 0;
+        padding-right: 0;
+        width: 100%;
+      }
+    }
+
     &__side {
       position: sticky;
       top: 1.5rem;
