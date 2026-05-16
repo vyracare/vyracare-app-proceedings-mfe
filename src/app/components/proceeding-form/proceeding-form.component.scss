@@ -1,7 +1,7 @@
 .proceeding-form {
   width: 100%;
 
-  /* Bloco base do formulário */
+  /* Estrutura base do formulario */
   &__fieldset {
     border: 0;
     margin: 0;
@@ -13,19 +13,63 @@
     border: 1px solid rgba(90, 59, 231, 0.12);
     border-radius: 20px;
     box-shadow: 0 18px 40px rgba(44, 56, 120, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
     padding: 2rem;
   }
 
-  /* Cabeçalho do formulário */
+  /* Cabecalho do bloco de configuracao */
   &__header {
-    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  &__eyebrow {
+    color: var(--color-primary);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* Secoes internas do formulario */
+  &__section {
+    border: 1px solid rgba(90, 59, 231, 0.08);
+    border-radius: 18px;
+    padding: 1.5rem;
+
+    &--accent {
+      background: linear-gradient(180deg, rgba(90, 59, 231, 0.04), rgba(90, 196, 255, 0.04));
+    }
+  }
+
+  &__section-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    margin-bottom: 1rem;
+  }
+
+  &__section-eyebrow {
+    color: var(--color-primary);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  &__section-description {
+    color: var(--color-muted);
+    margin: 0;
   }
 
   &__grid {
     row-gap: 1.25rem;
   }
 
-  /* Campo de descrição com feedback visual */
+  /* Campo descritivo com feedback visual */
   &__description {
     color: var(--color-muted);
     display: flex;
@@ -67,7 +111,7 @@
     font-size: 0.75rem;
   }
 
-  /* Área de ativação do procedimento */
+  /* Bloco de ativacao do procedimento */
   &__toggle {
     align-items: center;
     background: #f8f7ff;
@@ -75,8 +119,8 @@
     border-radius: 14px;
     display: flex;
     gap: 1rem;
-    margin-top: 1.5rem;
     padding: 1rem;
+    width: 100%;
   }
 
   &__toggle-content {
@@ -95,7 +139,7 @@
     margin: 0.2rem 0 0;
   }
 
-  /* Switch visual do campo booleano */
+  /* Switch customizado */
   &__switch {
     align-items: center;
     display: inline-flex;
@@ -139,12 +183,18 @@
     transform: translateX(20px);
   }
 
-  /* Rodapé com ações do formulário */
+  /* Rodape com acoes */
+  &__footer {
+    border-top: 1px solid rgba(90, 59, 231, 0.1);
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 1.5rem;
+  }
+
   &__actions {
     display: flex;
     gap: 0.75rem;
     justify-content: flex-end;
-    margin-top: 1.75rem;
   }
 
   &__error {
@@ -152,18 +202,18 @@
     border-radius: 12px;
     color: var(--color-accent);
     font-weight: 600;
-    margin: 1rem 0 0;
+    margin: 0;
     padding: 0.75rem 1rem;
   }
 }
 
-/* Ajustes visuais dos componentes do design system usados dentro do formulário */
+/* Ajustes visuais dos componentes do design system usados dentro do formulario */
 :host ::ng-deep .proceeding-form__header vc-heading .vc-heading {
   color: var(--color-text);
   font-size: 1.5rem;
   font-weight: 700;
   line-height: 1.2;
-  margin: 0 0 0.35rem;
+  margin: 0;
 }
 
 :host ::ng-deep .proceeding-form__header vc-text .vc-text {
@@ -194,9 +244,23 @@
       padding: 1.5rem;
     }
 
+    &__section {
+      padding: 1.2rem;
+    }
+
+    &__toggle {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    &__footer {
+      justify-content: stretch;
+    }
+
     &__actions {
       align-items: stretch;
       flex-direction: column;
+      width: 100%;
     }
   }
 }
