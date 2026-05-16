@@ -9,9 +9,7 @@
     <div class="proceeding-page__header-content">
       <span class="proceeding-page__eyebrow">Catalogo estetico</span>
       <vc-heading [level]="1">Cadastro de procedimentos esteticos</vc-heading>
-      <vc-text [muted]="true">
-        Organize tratamentos, categorias e valores do catalogo da empresa.
-      </vc-text>
+      <vc-text [muted]="true">Organize tratamentos, categorias e valores do catalogo da empresa.</vc-text>
     </div>
 
     <div class="proceeding-page__header-tag">
@@ -20,8 +18,34 @@
     </div>
   </header>
 
+  <section class="proceeding-page__summary">
+    <vc-card class="proceeding-page__summary-card" title="Resumo rapido">
+      <div class="proceeding-page__metrics">
+        <div class="proceeding-page__metric">
+          <span class="proceeding-page__metric-label">Registrados</span>
+          <strong>{{ totalProceedings() }}</strong>
+        </div>
+
+        <div class="proceeding-page__metric">
+          <span class="proceeding-page__metric-label">Ativos</span>
+          <strong>{{ activeProceedings() }}</strong>
+        </div>
+
+        <div class="proceeding-page__metric">
+          <span class="proceeding-page__metric-label">Categorias</span>
+          <strong>{{ categoryCount() }}</strong>
+        </div>
+      </div>
+
+      <div class="proceeding-page__success proceeding-page__success--inline" *ngIf="success()">
+        <span class="proceeding-page__badge">Concluido</span>
+        <p>Catalogo atualizado com sucesso.</p>
+      </div>
+    </vc-card>
+  </section>
+
   <div class="vc-row proceeding-page__workspace-grid">
-    <div class="vc-col-12 vc-col-lg-7">
+    <div class="vc-col-12 vc-col-xl-7">
       <vyracare-proceeding-form
         [loading]="loading()"
         [error]="error()"
@@ -29,32 +53,8 @@
       ></vyracare-proceeding-form>
     </div>
 
-    <div class="vc-col-12 vc-col-lg-5">
+    <div class="vc-col-12 vc-col-xl-5">
       <aside class="proceeding-page__side">
-        <vc-card class="proceeding-page__side-card" title="Resumo rapido">
-          <div class="proceeding-page__metrics">
-            <div class="proceeding-page__metric">
-              <span class="proceeding-page__metric-label">Registrados</span>
-              <strong>{{ totalProceedings() }}</strong>
-            </div>
-
-            <div class="proceeding-page__metric">
-              <span class="proceeding-page__metric-label">Ativos</span>
-              <strong>{{ activeProceedings() }}</strong>
-            </div>
-
-            <div class="proceeding-page__metric">
-              <span class="proceeding-page__metric-label">Categorias</span>
-              <strong>{{ categoryCount() }}</strong>
-            </div>
-          </div>
-
-          <div class="proceeding-page__success proceeding-page__success--inline" *ngIf="success()">
-            <span class="proceeding-page__badge">Concluido</span>
-            <p>Catalogo atualizado com sucesso.</p>
-          </div>
-        </vc-card>
-
         <vc-card class="proceeding-page__side-card proceeding-page__side-card--accent" title="Diretrizes do catalogo">
           <div class="proceeding-page__category-tags">
             <span class="proceeding-page__category-tag" *ngFor="let category of categoryHighlights">
@@ -68,24 +68,24 @@
             <li>Padronize duracao, preco e sessoes.</li>
           </ul>
         </vc-card>
+
+        <section class="proceeding-page__catalog">
+          <div class="proceeding-page__section-header">
+            <vc-heading [level]="2">Catalogo de procedimentos</vc-heading>
+            <vc-text [muted]="true">
+              Visualize o portfolio por categoria para revisar cobertura e precificacao.
+            </vc-text>
+          </div>
+
+          <div class="vc-row proceeding-page__catalog-grid">
+            <div class="vc-col-12" *ngFor="let group of catalogByCategory()">
+              <vc-card class="proceeding-page__catalog-card" [title]="group.category" [subtitle]="group.subtitle">
+                <vc-list [items]="group.items"></vc-list>
+              </vc-card>
+            </div>
+          </div>
+        </section>
       </aside>
     </div>
   </div>
-
-  <section class="proceeding-page__catalog">
-    <div class="proceeding-page__section-header">
-      <vc-heading [level]="2">Catalogo de procedimentos</vc-heading>
-      <vc-text [muted]="true">
-        Visualize o portfolio por categoria para revisar cobertura e precificacao.
-      </vc-text>
-    </div>
-
-    <div class="vc-row proceeding-page__catalog-grid">
-      <div class="vc-col-12" *ngFor="let group of catalogByCategory()">
-        <vc-card class="proceeding-page__catalog-card" [title]="group.category" [subtitle]="group.subtitle">
-          <vc-list [items]="group.items"></vc-list>
-        </vc-card>
-      </div>
-    </div>
-  </section>
 </section>
