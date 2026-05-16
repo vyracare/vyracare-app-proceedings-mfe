@@ -4,7 +4,7 @@
   gap: 2rem;
   width: 100%;
 
-  /* Navegacao contextual da pagina */
+  /* Navegacao contextual */
   &__breadcrumb {
     align-items: center;
     color: var(--color-muted);
@@ -17,13 +17,9 @@
       font-weight: 600;
       text-decoration: none;
     }
-
-    span {
-      color: var(--color-muted);
-    }
   }
 
-  /* Hero principal da tela */
+  /* Hero de abertura */
   &__header {
     align-items: center;
     background: linear-gradient(135deg, rgba(90, 59, 231, 0.12), rgba(255, 108, 136, 0.12));
@@ -69,13 +65,9 @@
       color: var(--color-muted);
       font-size: 0.75rem;
     }
-
-    strong {
-      color: var(--color-text);
-    }
   }
 
-  /* Workspace principal com formulario e trilha operacional */
+  /* Grid principal */
   &__workspace-grid {
     row-gap: 2rem;
   }
@@ -83,8 +75,53 @@
   &__side {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
-    height: 100%;
+    gap: 1rem;
+  }
+
+  /* Card lateral base */
+  &__side-card {
+    background: #fff;
+    border: 1px solid rgba(90, 59, 231, 0.1);
+    border-radius: 16px;
+    box-shadow: 0 12px 25px rgba(44, 56, 120, 0.08);
+    padding: 1.15rem;
+
+    &--accent {
+      background: linear-gradient(150deg, #f4f1ff, #eef6ff);
+      border-color: rgba(90, 196, 255, 0.3);
+    }
+  }
+
+  /* Resumo simplificado */
+  &__metrics {
+    display: grid;
+    gap: 0.85rem;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  &__metric {
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(90, 59, 231, 0.08);
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-height: 96px;
+    padding: 0.9rem;
+
+    strong {
+      color: var(--color-text);
+      font-size: 1.9rem;
+      line-height: 1;
+    }
+  }
+
+  &__metric-label {
+    color: var(--color-muted);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
   }
 
   /* Feedback de sucesso */
@@ -96,11 +133,16 @@
     box-shadow: 0 12px 24px rgba(44, 56, 120, 0.08);
     display: flex;
     gap: 1rem;
-    padding: 1.1rem 1.4rem;
+    padding: 1rem 1.1rem;
 
     p {
       color: var(--color-muted);
-      margin: 0.25rem 0 0;
+      margin: 0;
+    }
+
+    &--inline {
+      box-shadow: none;
+      margin-top: 1rem;
     }
   }
 
@@ -118,53 +160,12 @@
     text-transform: uppercase;
   }
 
-  /* Bloco lateral de indicadores */
-  &__summary {
-    width: 100%;
-  }
-
-  &__summary-grid {
-    row-gap: 1rem;
-  }
-
-  &__summary-card {
-    height: 100%;
-
-    strong {
-      color: var(--color-text);
-      display: block;
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
-    }
-
-    p {
-      color: var(--color-muted);
-      margin: 0;
-    }
-
-    &--accent {
-      --vc-card-bg: linear-gradient(135deg, rgba(90, 59, 231, 0.08), rgba(90, 196, 255, 0.1));
-    }
-  }
-
-  /* Card lateral com diretrizes */
-  &__side-card {
-    background: #fff;
-    border: 1px solid rgba(90, 59, 231, 0.1);
-    border-radius: 16px;
-    box-shadow: 0 12px 25px rgba(44, 56, 120, 0.08);
-    padding: 1.25rem;
-
-    &--accent {
-      background: linear-gradient(150deg, #f4f1ff, #eef6ff);
-      border-color: rgba(90, 196, 255, 0.3);
-    }
-  }
-
+  /* Diretrizes e categorias */
   &__category-tags {
     display: flex;
     flex-wrap: wrap;
     gap: 0.65rem;
+    margin-bottom: 1rem;
   }
 
   &__category-tag {
@@ -179,13 +180,6 @@
     padding: 0.45rem 0.85rem;
   }
 
-  &__side-divider {
-    background: rgba(90, 59, 231, 0.12);
-    height: 1px;
-    margin: 1.25rem 0;
-    width: 100%;
-  }
-
   &__practice-list {
     color: var(--color-muted);
     display: grid;
@@ -194,7 +188,7 @@
     padding-left: 1rem;
   }
 
-  /* Catalogo por categoria */
+  /* Catalogo */
   &__catalog {
     display: flex;
     flex-direction: column;
@@ -208,7 +202,7 @@
   }
 
   &__catalog-grid {
-    row-gap: 1.5rem;
+    row-gap: 1rem;
   }
 
   &__catalog-card {
@@ -216,7 +210,7 @@
   }
 }
 
-/* Overrides dos componentes do design system usados na pagina */
+/* Overrides dos componentes do design system */
 :host ::ng-deep .proceeding-page__header vc-heading .vc-heading {
   color: var(--color-text);
   font-size: 2rem;
@@ -225,9 +219,9 @@
   margin: 0;
 }
 
-:host ::ng-deep .proceeding-page__header vc-text .vc-text {
+:host ::ng-deep .proceeding-page__header vc-text .vc-text,
+:host ::ng-deep .proceeding-page__section-header vc-text .vc-text {
   color: var(--color-muted);
-  font-size: 1rem;
   margin: 0;
 }
 
@@ -245,7 +239,7 @@
 
 :host ::ng-deep vc-card.proceeding-page__side-card .vc-card__title {
   color: var(--color-text);
-  font-size: 1.25rem;
+  font-size: 1.2rem;
   font-weight: 700;
   line-height: 1.2;
   margin: 0;
@@ -253,11 +247,6 @@
 
 :host ::ng-deep .proceeding-page__section-header vc-heading .vc-heading {
   color: var(--color-text);
-  margin: 0;
-}
-
-:host ::ng-deep .proceeding-page__section-header vc-text .vc-text {
-  color: var(--color-muted);
   margin: 0;
 }
 
@@ -269,7 +258,7 @@
   gap: 0.75rem;
 }
 
-@media (min-width: 1400px) {
+@media (min-width: 1200px) {
   .proceeding-page {
     &__side {
       position: sticky;
@@ -278,10 +267,10 @@
   }
 }
 
-@media (max-width: 1100px) {
+@media (max-width: 900px) {
   .proceeding-page {
-    &__header-tag {
-      width: 100%;
+    &__metrics {
+      grid-template-columns: 1fr;
     }
   }
 }
