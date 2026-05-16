@@ -1,0 +1,5 @@
+{
+  "repository": "vyracare/vyracare-app-shell",
+  "environmentFile": "src/environments/environments.prod.ts",
+  "remoteEntryProperty": "proceedingsRemoteEntry"
+}
