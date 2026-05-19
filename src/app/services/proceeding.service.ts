@@ -1,10 +1,9 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import {
-  AestheticProcedure,
-  AestheticProcedurePayload,
-  PROCEEDINGS_STORAGE_KEY
-} from '../models/proceeding.model';
+import { catchError } from 'rxjs/operators';
+import { environment } from '../../environments/environments';
+import { AestheticProcedure, AestheticProcedurePayload } from '../models/proceeding.model';
 
 type ProceedingsMockModule = AestheticProcedure[] | { default: AestheticProcedure[] };
 
@@ -22,67 +21,33 @@ function normalizeProceedingsMock(mockModule: ProceedingsMockModule): AestheticP
 @Injectable({
   providedIn: 'root'
 })
-/** Serviço responsável por ler e persistir o catálogo local de procedimentos estéticos do MFE. */
+/** Servico responsavel por integrar o catalogo do MFE com a API de proceedings. */
 export class ProceedingService {
-  /** Retorna o catálogo completo disponível no armazenamento local ou no mock inicial. */
+  private readonly apiUrl = environment.apiUrl;
+
+  constructor(private readonly http: HttpClient) {}
+
+  /** Carrega o catalogo da API e usa o mock local apenas como fallback de leitura. */
   listProceedings(): Observable<AestheticProcedure[]> {
-    return of(this.readProceedings());
+    if (!this.apiUrl) {
+      return of([...DEFAULT_PROCEEDINGS]);
+    }
+
+    return this.http.get<AestheticProcedure[]>(this.apiUrl).pipe(
+      catchError(() => of([...DEFAULT_PROCEEDINGS]))
+    );
   }
 
-  /**
-   * Registra um novo procedimento no catálogo local, gerando os metadados
-   * mínimos necessários para que ele possa ser exibido na listagem.
-   */
+  /** Persiste um novo procedimento pela rota publicada da API. */
   registerProcedure(payload: AestheticProcedurePayload): Observable<AestheticProcedure> {
-    const storedProceedings = this.readProceedings();
-    const proceeding: AestheticProcedure = {
-      ...payload,
-      id: this.generateId(payload.code),
-      createdAt: new Date().toISOString()
-    };
-
-    const nextProceedings = [proceeding, ...storedProceedings];
-    this.writeProceedings(nextProceedings);
-    return of(proceeding);
-  }
-
-  /**
-   * Lê o catálogo persistido. Quando não houver `localStorage` disponível
-   * ou os dados estiverem ausentes/inválidos, utiliza o mock padrão do projeto.
-   */
-  private readProceedings(): AestheticProcedure[] {
-    if (typeof globalThis.localStorage === 'undefined') {
-      return [...DEFAULT_PROCEEDINGS];
+    if (!this.apiUrl) {
+      return of({
+        ...payload,
+        id: payload.code.toLowerCase(),
+        createdAt: new Date().toISOString()
+      });
     }
 
-    const storedValue = globalThis.localStorage.getItem(PROCEEDINGS_STORAGE_KEY);
-    if (!storedValue) {
-      return [...DEFAULT_PROCEEDINGS];
-    }
-
-    try {
-      const parsedValue = JSON.parse(storedValue) as AestheticProcedure[];
-      return Array.isArray(parsedValue) && parsedValue.length > 0 ? parsedValue : [...DEFAULT_PROCEEDINGS];
-    } catch {
-      return [...DEFAULT_PROCEEDINGS];
-    }
-  }
-
-  /** Persiste o catálogo serializado no `localStorage` para manter o estado entre recargas. */
-  private writeProceedings(proceedings: AestheticProcedure[]): void {
-    if (typeof globalThis.localStorage === 'undefined') {
-      return;
-    }
-
-    globalThis.localStorage.setItem(PROCEEDINGS_STORAGE_KEY, JSON.stringify(proceedings));
-  }
-
-  /** Gera um identificador estável para novos procedimentos, usando UUID quando disponível. */
-  private generateId(code: string): string {
-    if (typeof globalThis.crypto !== 'undefined' && 'randomUUID' in globalThis.crypto) {
-      return globalThis.crypto.randomUUID();
-    }
-
-    return `${code.toLowerCase()}-${Date.now()}`;
+    return this.http.post<AestheticProcedure>(this.apiUrl, payload);
   }
 }

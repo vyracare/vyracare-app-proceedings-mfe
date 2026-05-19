@@ -1,48 +1,66 @@
 import { TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { ProceedingService } from './proceeding.service';
-import {
-  AestheticProcedure,
-  AestheticProcedurePayload,
-  PROCEEDINGS_STORAGE_KEY
-} from '../models/proceeding.model';
+import { AestheticProcedure, AestheticProcedurePayload } from '../models/proceeding.model';
 
 describe('ProceedingService', () => {
   let service: ProceedingService;
-  const originalLocalStorage = globalThis.localStorage;
-  const originalCrypto = globalThis.crypto;
+  let httpMock: HttpTestingController;
 
   beforeEach(() => {
-    localStorage.clear();
     TestBed.configureTestingModule({
-      providers: [ProceedingService]
+      providers: [ProceedingService, provideHttpClient(), provideHttpClientTesting()]
     });
 
     service = TestBed.inject(ProceedingService);
+    httpMock = TestBed.inject(HttpTestingController);
   });
 
   afterEach(() => {
-    Object.defineProperty(globalThis, 'localStorage', {
-      configurable: true,
-      value: originalLocalStorage
-    });
-
-    Object.defineProperty(globalThis, 'crypto', {
-      configurable: true,
-      value: originalCrypto
-    });
-
-    jest.restoreAllMocks();
+    httpMock.verify();
   });
 
-  it('should return the seeded catalog when there is no local data', (done) => {
+  it('should load proceedings from the API', (done) => {
+    const response: AestheticProcedure[] = [
+      {
+        id: 'proc-1',
+        name: 'Botox',
+        category: 'Injetaveis',
+        code: 'INJ-001',
+        targetArea: 'Face',
+        durationMinutes: 45,
+        sessionPrice: 950,
+        sessionCount: 1,
+        recoveryTime: '24 horas',
+        description: 'Suavizacao de rugas dinamicas.',
+        active: true,
+        createdAt: '2026-05-01T09:00:00.000Z'
+      }
+    ];
+
+    service.listProceedings().subscribe((proceedings) => {
+      expect(proceedings).toEqual(response);
+      done();
+    });
+
+    const request = httpMock.expectOne('https://eri1s9zq97.execute-api.us-east-1.amazonaws.com/api/proceedings');
+    expect(request.request.method).toBe('GET');
+    request.flush(response);
+  });
+
+  it('should fallback to the seeded catalog when the API fails', (done) => {
     service.listProceedings().subscribe((proceedings) => {
       expect(proceedings.length).toBeGreaterThan(0);
       expect(proceedings[0]).toHaveProperty('category');
       done();
     });
+
+    const request = httpMock.expectOne('https://eri1s9zq97.execute-api.us-east-1.amazonaws.com/api/proceedings');
+    request.flush('fail', { status: 500, statusText: 'Server Error' });
   });
 
-  it('should persist a newly registered procedure', (done) => {
+  it('should persist a new proceeding through the API', (done) => {
     const payload: AestheticProcedurePayload = {
       name: 'Bioestimulador de colageno',
       category: 'Injetaveis',
@@ -56,64 +74,51 @@ describe('ProceedingService', () => {
       active: true
     };
 
-    service.registerProcedure(payload).subscribe((procedure) => {
-      expect(procedure.name).toBe(payload.name);
-      expect(localStorage.getItem(PROCEEDINGS_STORAGE_KEY)).not.toBeNull();
+    service.registerProcedure(payload).subscribe((proceeding) => {
+      expect(proceeding.name).toBe(payload.name);
+      expect(proceeding.code).toBe(payload.code);
+      done();
+    });
 
-      service.listProceedings().subscribe((proceedings) => {
-        expect(proceedings.some((item) => item.code === payload.code)).toBe(true);
-        done();
-      });
+    const request = httpMock.expectOne('https://eri1s9zq97.execute-api.us-east-1.amazonaws.com/api/proceedings');
+    expect(request.request.method).toBe('POST');
+    expect(request.request.body).toEqual(payload);
+    request.flush({
+      ...payload,
+      id: 'new-id',
+      createdAt: '2026-05-16T18:00:00.000Z'
     });
   });
 
-  it('should fallback to the mock catalog when localStorage is unavailable', () => {
-    Object.defineProperty(globalThis, 'localStorage', {
-      configurable: true,
-      value: undefined
+  it('should fallback to the mock catalog when apiUrl is empty', (done) => {
+    (service as any).apiUrl = '';
+
+    service.listProceedings().subscribe((proceedings) => {
+      expect(proceedings.length).toBeGreaterThan(0);
+      done();
     });
-
-    const proceedings = (service as any).readProceedings() as AestheticProcedure[];
-
-    expect(proceedings.length).toBeGreaterThan(0);
-    expect(proceedings[0].id).toBeDefined();
   });
 
-  it('should fallback to the mock catalog when persisted data is invalid', () => {
-    localStorage.setItem(PROCEEDINGS_STORAGE_KEY, 'not-a-json');
+  it('should build a local response when apiUrl is empty on save', (done) => {
+    (service as any).apiUrl = '';
 
-    const proceedings = (service as any).readProceedings() as AestheticProcedure[];
+    const payload: AestheticProcedurePayload = {
+      name: 'Peeling glow',
+      category: 'Facial',
+      code: 'FAC-999',
+      targetArea: 'Rosto',
+      durationMinutes: 30,
+      sessionPrice: 199,
+      sessionCount: 1,
+      recoveryTime: 'Sem afastamento',
+      description: 'Protocolo rapido para luminosidade.',
+      active: true
+    };
 
-    expect(proceedings.length).toBeGreaterThan(0);
-    expect(proceedings[0].category).toBeDefined();
-  });
-
-  it('should fallback to the mock catalog when persisted data is empty', () => {
-    localStorage.setItem(PROCEEDINGS_STORAGE_KEY, JSON.stringify([]));
-
-    const proceedings = (service as any).readProceedings() as AestheticProcedure[];
-
-    expect(proceedings.length).toBeGreaterThan(0);
-  });
-
-  it('should ignore writes when localStorage is unavailable', () => {
-    Object.defineProperty(globalThis, 'localStorage', {
-      configurable: true,
-      value: undefined
+    service.registerProcedure(payload).subscribe((proceeding) => {
+      expect(proceeding.id).toBe('fac-999');
+      expect(proceeding.name).toBe(payload.name);
+      done();
     });
-
-    expect(() => (service as any).writeProceedings([])).not.toThrow();
   });
-
-  it('should generate a fallback id when crypto randomUUID is unavailable', () => {
-    Object.defineProperty(globalThis, 'crypto', {
-      configurable: true,
-      value: {}
-    });
-    jest.spyOn(Date, 'now').mockReturnValue(123456);
-
-    const id = (service as any).generateId('FAC-777') as string;
-
-    expect(id).toBe('fac-777-123456');
-  });
-});
+}
