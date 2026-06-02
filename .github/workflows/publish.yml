@@ -3,9 +3,6 @@ name: PUBLISH
 on:
   push:
     branches:
-      - develop
-      - release
-      - 'release/**'
       - main
 
 jobs:
