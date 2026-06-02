@@ -3,10 +3,12 @@ import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { ProceedingService } from './proceeding.service';
 import { AestheticProcedure, AestheticProcedurePayload } from '../models/proceeding.model';
+import { environment } from '../../environments/environments';
 
 describe('ProceedingService', () => {
   let service: ProceedingService;
   let httpMock: HttpTestingController;
+  const proceedingsApiUrl = `${environment.apiUrl}`;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -44,7 +46,7 @@ describe('ProceedingService', () => {
       done();
     });
 
-    const request = httpMock.expectOne('https://eri1s9zq97.execute-api.us-east-1.amazonaws.com/api/proceedings');
+    const request = httpMock.expectOne(proceedingsApiUrl);
     expect(request.request.method).toBe('GET');
     request.flush(response);
   });
@@ -56,7 +58,7 @@ describe('ProceedingService', () => {
       done();
     });
 
-    const request = httpMock.expectOne('https://eri1s9zq97.execute-api.us-east-1.amazonaws.com/api/proceedings');
+    const request = httpMock.expectOne(proceedingsApiUrl);
     request.flush('fail', { status: 500, statusText: 'Server Error' });
   });
 
@@ -80,7 +82,7 @@ describe('ProceedingService', () => {
       done();
     });
 
-    const request = httpMock.expectOne('https://eri1s9zq97.execute-api.us-east-1.amazonaws.com/api/proceedings');
+    const request = httpMock.expectOne(proceedingsApiUrl);
     expect(request.request.method).toBe('POST');
     expect(request.request.body).toEqual(payload);
     request.flush({
