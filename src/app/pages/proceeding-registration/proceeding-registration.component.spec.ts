@@ -35,7 +35,7 @@ describe('ProceedingRegistrationPageComponent', () => {
     expect(proceedingService.listProceedings).toHaveBeenCalled();
   });
 
-  it('should group the catalog by category with formatted description', () => {
+  it('should filter the catalog by name, code or category', () => {
     const seededProceedings: AestheticProcedure[] = [
       {
         id: 'laser-1',
@@ -73,16 +73,42 @@ describe('ProceedingRegistrationPageComponent', () => {
     const component = fixture.componentInstance;
     fixture.detectChanges();
 
-    const groupedCatalog = (component as any).catalogByCategory();
+    component.search('fac-002');
 
-    expect(groupedCatalog).toHaveLength(2);
-    expect(groupedCatalog[0].category).toBe('Facial');
-    expect(groupedCatalog[0].subtitle).toBe('1 procedimento(s) registrado(s)');
-    expect(groupedCatalog[0].items[0].icon).toBe('pause-circle');
-    expect(groupedCatalog[0].items[0].description).toContain('R$');
-    expect((component as any).categoryCount()).toBe(2);
-    expect((component as any).activeProceedings()).toBe(1);
-    expect((component as any).totalProceedings()).toBe(2);
+    expect((component as any).filteredProceedings()).toEqual([seededProceedings[1]]);
+    component.search('laser');
+    expect((component as any).filteredProceedings()).toEqual([seededProceedings[0]]);
+    component.search('');
+    expect((component as any).filteredProceedings()).toEqual(seededProceedings);
+    expect((component as any).formatCurrency(280)).toContain('280');
+  });
+
+  it('should manage the registration modal without closing during a save', () => {
+    const fixture = TestBed.createComponent(ProceedingRegistrationPageComponent);
+    const component = fixture.componentInstance;
+
+    component.openRegistration();
+    expect((component as any).registrationModalOpen()).toBe(true);
+
+    (component as any).loading.set(true);
+    component.closeRegistration();
+    expect((component as any).registrationModalOpen()).toBe(true);
+
+    (component as any).loading.set(false);
+    component.closeRegistration();
+    expect((component as any).registrationModalOpen()).toBe(false);
+  });
+
+  it('should track proceedings by id', () => {
+    const fixture = TestBed.createComponent(ProceedingRegistrationPageComponent);
+    const component = fixture.componentInstance;
+    const proceeding = {
+      id: 'proc-1', name: 'Botox', category: 'Injetaveis', code: 'INJ-001', targetArea: 'Face',
+      durationMinutes: 45, sessionPrice: 950, sessionCount: 1, recoveryTime: '24 horas',
+      description: 'Procedimento facial.', active: true, createdAt: '2026-05-01T09:00:00.000Z'
+    };
+
+    expect((component as any).trackProceeding(0, proceeding)).toBe('proc-1');
   });
 
   it('should handle successful procedure registration', () => {

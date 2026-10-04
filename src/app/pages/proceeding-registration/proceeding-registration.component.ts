@@ -1,18 +1,9 @@
 import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import {
-  VcCardComponent,
-  VcHeadingComponent,
-  VcListComponent,
-  VcTextComponent
-} from '@vyracare/design-system';
+import { VcButtonComponent, VcHeadingComponent, VcTextComponent } from '@vyracare/design-system';
 import { ProceedingFormComponent } from '../../components/proceeding-form/proceeding-form.component';
-import {
-  AestheticProcedure,
-  AestheticProcedurePayload,
-  ProcedureCategorySummary
-} from '../../models/proceeding.model';
+import { AestheticProcedure, AestheticProcedurePayload } from '../../models/proceeding.model';
 import { ProceedingService } from '../../services/proceeding.service';
 
 @Component({
@@ -22,64 +13,55 @@ import { ProceedingService } from '../../services/proceeding.service';
     CommonModule,
     RouterLink,
     ProceedingFormComponent,
-    VcCardComponent,
+    VcButtonComponent,
     VcHeadingComponent,
-    VcListComponent,
     VcTextComponent
   ],
   templateUrl: './proceeding-registration.component.html',
   styleUrl: './proceeding-registration.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-/** Pagina principal do MFE, responsavel por compor o formulario, os indicadores e o catalogo de procedimentos. */
 export class ProceedingRegistrationPageComponent {
-  /** Controla o estado de submissao do formulario para bloquear interacoes duplicadas. */
   protected readonly loading = signal(false);
-  /** Exibe a mensagem de erro operacional em caso de falha na gravacao. */
+  protected readonly listLoading = signal(true);
   protected readonly error = signal<string | null>(null);
-  /** Sinaliza visualmente quando o cadastro foi concluido com sucesso. */
   protected readonly success = signal(false);
-  /** Armazena o catalogo de proceedings carregado pelo servico. */
+  protected readonly registrationModalOpen = signal(false);
   protected readonly proceedings = signal<AestheticProcedure[]>([]);
-  /** Lista de categorias destacadas na lateral para reforcar a organizacao do catalogo. */
-  protected readonly categoryHighlights = ['Facial', 'Corporal', 'Laser', 'Injetaveis', 'Capilar', 'Bem-estar'];
-  /** Resume o total de itens existentes no catalogo. */
-  protected readonly totalProceedings = computed(() => this.proceedings().length);
-  /** Resume quantos procedimentos estao liberados para comercializacao. */
-  protected readonly activeProceedings = computed(() => this.proceedings().filter((proceeding) => proceeding.active).length);
-  /** Informa quantas categorias distintas existem hoje no catalogo. */
-  protected readonly categoryCount = computed(() => new Set(this.proceedings().map((proceeding) => proceeding.category)).size);
-  /** Agrupa os proceedings por categoria para renderizar o catalogo em blocos de leitura rapida. */
-  protected readonly catalogByCategory = computed<ProcedureCategorySummary[]>(() => {
-    const categoryMap = new Map<string, AestheticProcedure[]>();
+  protected readonly searchTerm = signal('');
+  protected readonly filteredProceedings = computed(() => {
+    const term = this.searchTerm().trim().toLocaleLowerCase('pt-BR');
 
-    for (const proceeding of this.proceedings()) {
-      const currentCategory = categoryMap.get(proceeding.category) ?? [];
-      currentCategory.push(proceeding);
-      categoryMap.set(proceeding.category, currentCategory);
+    if (!term) {
+      return this.proceedings();
     }
 
-    return Array.from(categoryMap.entries())
-      .sort(([left], [right]) => left.localeCompare(right))
-      .map(([category, proceedings]) => ({
-        category,
-        subtitle: `${proceedings.length} procedimento(s) registrado(s)`,
-        items: proceedings.map((proceeding) => ({
-          icon: proceeding.active ? 'check2-circle' : 'pause-circle',
-          title: proceeding.name,
-          description: `${proceeding.code} - ${proceeding.targetArea} - ${proceeding.durationMinutes} min - ${this.formatCurrency(proceeding.sessionPrice)}`
-        }))
-      }));
+    return this.proceedings().filter((proceeding) =>
+      [proceeding.name, proceeding.code, proceeding.category]
+        .some((value) => value.toLocaleLowerCase('pt-BR').includes(term))
+    );
   });
 
   constructor(private readonly proceedingService: ProceedingService) {
     this.loadCatalog();
   }
 
-  /**
-   * Recebe o payload do formulario, delega a persistencia ao servico
-   * e atualiza os estados visuais da pagina conforme o resultado.
-   */
+  search(value: string): void {
+    this.searchTerm.set(value);
+  }
+
+  openRegistration(): void {
+    this.error.set(null);
+    this.success.set(false);
+    this.registrationModalOpen.set(true);
+  }
+
+  closeRegistration(): void {
+    if (!this.loading()) {
+      this.registrationModalOpen.set(false);
+    }
+  }
+
   handleSubmit(payload: AestheticProcedurePayload): void {
     this.loading.set(true);
     this.error.set(null);
@@ -87,9 +69,10 @@ export class ProceedingRegistrationPageComponent {
 
     this.proceedingService.registerProcedure(payload).subscribe({
       next: () => {
-        this.loadCatalog();
         this.loading.set(false);
         this.success.set(true);
+        this.registrationModalOpen.set(false);
+        this.loadCatalog();
       },
       error: () => {
         this.loading.set(false);
@@ -98,18 +81,22 @@ export class ProceedingRegistrationPageComponent {
     });
   }
 
-  /** Recarrega o catalogo atual para refletir o estado mais recente da fonte de dados. */
-  private loadCatalog(): void {
-    this.proceedingService.listProceedings().subscribe((proceedings) => {
-      this.proceedings.set(proceedings);
-    });
+  protected trackProceeding(_: number, proceeding: AestheticProcedure): string {
+    return proceeding.id;
   }
 
-  /** Formata valores monetarios no padrao brasileiro para exibicao no catalogo. */
-  private formatCurrency(value: number): string {
+  protected formatCurrency(value: number): string {
     return new Intl.NumberFormat('pt-BR', {
       style: 'currency',
       currency: 'BRL'
     }).format(value);
+  }
+
+  private loadCatalog(): void {
+    this.listLoading.set(true);
+    this.proceedingService.listProceedings().subscribe((proceedings) => {
+      this.proceedings.set(proceedings);
+      this.listLoading.set(false);
+    });
   }
 }
