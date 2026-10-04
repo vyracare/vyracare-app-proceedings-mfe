@@ -21,6 +21,7 @@ import { ProceedingService } from '../../services/proceeding.service';
   styleUrl: './proceeding-registration.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
+/** Coordena a consulta, o filtro e o cadastro modal de procedimentos. */
 export class ProceedingRegistrationPageComponent {
   protected readonly loading = signal(false);
   protected readonly listLoading = signal(true);
@@ -46,22 +47,26 @@ export class ProceedingRegistrationPageComponent {
     this.loadCatalog();
   }
 
+  /** Atualiza o termo usado para filtrar nome, codigo e categoria do catalogo. */
   search(value: string): void {
     this.searchTerm.set(value);
   }
 
+  /** Abre o formulario de cadastro com os feedbacks anteriores limpos. */
   openRegistration(): void {
     this.error.set(null);
     this.success.set(false);
     this.registrationModalOpen.set(true);
   }
 
+  /** Fecha o cadastro quando nao existe uma gravacao em andamento. */
   closeRegistration(): void {
     if (!this.loading()) {
       this.registrationModalOpen.set(false);
     }
   }
 
+  /** Persiste um procedimento e atualiza o catalogo depois da gravacao. */
   handleSubmit(payload: AestheticProcedurePayload): void {
     this.loading.set(true);
     this.error.set(null);
@@ -81,10 +86,12 @@ export class ProceedingRegistrationPageComponent {
     });
   }
 
+  /** Fornece uma chave estavel para a renderizacao das linhas de procedimentos. */
   protected trackProceeding(_: number, proceeding: AestheticProcedure): string {
     return proceeding.id;
   }
 
+  /** Formata o valor da sessao no padrao monetario brasileiro. */
   protected formatCurrency(value: number): string {
     return new Intl.NumberFormat('pt-BR', {
       style: 'currency',
@@ -92,6 +99,7 @@ export class ProceedingRegistrationPageComponent {
     }).format(value);
   }
 
+  /** Recarrega o catalogo apresentado na tabela. */
   private loadCatalog(): void {
     this.listLoading.set(true);
     this.proceedingService.listProceedings().subscribe((proceedings) => {
