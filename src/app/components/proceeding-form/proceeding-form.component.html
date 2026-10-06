@@ -1,164 +1,89 @@
 <form class="proceeding-form" [formGroup]="form" (ngSubmit)="onSubmit()">
   <fieldset [disabled]="loading" class="proceeding-form__fieldset">
     <div class="proceeding-form__card">
-      <div class="proceeding-form__header">
-        <span class="proceeding-form__eyebrow">Dados do protocolo</span>
-        <vc-heading [level]="2">Configuração do procedimento</vc-heading>
-        <vc-text [muted]="true">
-          Defina categoria, duração, preço e orientações para padronizar a oferta da clínica.
-        </vc-text>
-        <small class="proceeding-form__required-note">* Campos obrigatórios</small>
-      </div>
+      <div class="proceeding-form__layout">
+        <div class="proceeding-form__main">
+          <section class="proceeding-form__section" aria-labelledby="procedure-identification-title">
+            <div class="proceeding-form__section-header">
+              <span class="proceeding-form__step" aria-hidden="true">ID</span>
+              <div>
+                <h3 id="procedure-identification-title">Identificação</h3>
+                <p>Dados usados para localizar e reconhecer o procedimento no dia a dia.</p>
+              </div>
+            </div>
 
-      <div class="proceeding-form__section">
-        <div class="proceeding-form__section-header">
-          <span class="proceeding-form__section-eyebrow">Identificação</span>
-          <p class="proceeding-form__section-description">
-            Informe como o procedimento será localizado e apresentado na operação.
-          </p>
-        </div>
+            <div class="proceeding-form__grid proceeding-form__grid--identification">
+              <div class="proceeding-form__field proceeding-form__field--full">
+                <vc-input
+                  id="procedure-name"
+                  label="Nome do procedimento"
+                  placeholder="Ex.: Toxina botulínica premium"
+                  formControlName="name"
+                  [required]="true"
+                  [error]="form.controls.name.touched && form.controls.name.invalid ? 'Informe o nome do procedimento.' : ''"
+                ></vc-input>
+              </div>
 
-        <div class="vc-row proceeding-form__grid">
-          <div class="vc-col-12">
-            <vc-input
-              id="procedure-name"
-              label="Nome do procedimento"
-              placeholder="Ex.: Toxina botulínica premium"
-              formControlName="name"
-              [required]="true"
-              [error]="form.controls.name.touched && form.controls.name.invalid ? 'Informe o nome do procedimento.' : ''"
-            ></vc-input>
-          </div>
+              <div class="proceeding-form__field">
+                <vc-select
+                  id="procedure-category"
+                  label="Categoria"
+                  placeholder="Selecione a categoria"
+                  formControlName="category"
+                  [required]="true"
+                  [options]="categoryOptions"
+                  [error]="form.controls.category.touched && form.controls.category.invalid ? 'Selecione a categoria.' : ''"
+                ></vc-select>
+              </div>
 
-          <div class="vc-col-12 vc-col-lg-6">
-            <vc-select
-              id="procedure-category"
-              label="Categoria"
-              placeholder="Selecione a categoria"
-              formControlName="category"
-              [required]="true"
-              [options]="categoryOptions"
-              [error]="form.controls.category.touched && form.controls.category.invalid ? 'Selecione a categoria.' : ''"
-            ></vc-select>
-          </div>
+              <div class="proceeding-form__field">
+                <vc-input
+                  id="procedure-code"
+                  label="Código interno"
+                  placeholder="Ex.: FAC-014"
+                  hint="Use um código curto e único."
+                  formControlName="code"
+                  [required]="true"
+                  [error]="form.controls.code.touched && form.controls.code.invalid ? 'Defina um código interno.' : ''"
+                ></vc-input>
+              </div>
 
-          <div class="vc-col-12 vc-col-lg-6">
-            <vc-input
-              id="procedure-code"
-              label="Código interno"
-              placeholder="Ex.: FAC-014"
-              hint="Use um código curto e único para facilitar buscas."
-              formControlName="code"
-              [required]="true"
-              [error]="form.controls.code.touched && form.controls.code.invalid ? 'Defina um código interno.' : ''"
-            ></vc-input>
-          </div>
+              <div class="proceeding-form__field">
+                <vc-input
+                  id="procedure-target-area"
+                  label="Área principal"
+                  placeholder="Ex.: Face ou abdome"
+                  formControlName="targetArea"
+                  [required]="true"
+                  [error]="form.controls.targetArea.touched && form.controls.targetArea.invalid ? 'Informe a área principal.' : ''"
+                ></vc-input>
+              </div>
 
-          <div class="vc-col-12 vc-col-lg-6">
-            <vc-input
-              id="procedure-target-area"
-              label="Área principal"
-              placeholder="Ex.: Face, abdome ou couro cabeludo"
-              formControlName="targetArea"
-              [required]="true"
-              [error]="form.controls.targetArea.touched && form.controls.targetArea.invalid ? 'Informe a área principal.' : ''"
-            ></vc-input>
-          </div>
+              <div class="proceeding-form__field">
+                <vc-input
+                  id="procedure-recovery-time"
+                  label="Recuperação"
+                  placeholder="Ex.: 24 horas ou sem afastamento"
+                  formControlName="recoveryTime"
+                ></vc-input>
+              </div>
+            </div>
+          </section>
 
-          <div class="vc-col-12 vc-col-lg-6">
-            <vc-input
-              id="procedure-recovery-time"
-              label="Recuperação"
-              placeholder="Ex.: 24 horas ou sem afastamento"
-              formControlName="recoveryTime"
-            ></vc-input>
-          </div>
-        </div>
-      </div>
+          <section class="proceeding-form__section" aria-labelledby="procedure-description-title">
+            <div class="proceeding-form__section-header">
+              <span class="proceeding-form__step" aria-hidden="true">TXT</span>
+              <div>
+                <h3 id="procedure-description-title">Apresentação</h3>
+                <p>Resumo consultado pela equipe clínica e comercial.</p>
+              </div>
+            </div>
 
-      <div class="proceeding-form__section">
-        <div class="proceeding-form__section-header">
-          <span class="proceeding-form__section-eyebrow">Operação e cobrança</span>
-          <p class="proceeding-form__section-description">
-            Configure o tempo reservado na agenda e os dados comerciais do protocolo.
-          </p>
-        </div>
-
-        <div class="vc-row proceeding-form__grid">
-          <div class="vc-col-12 vc-col-md-6 vc-col-lg-4">
-            <vc-input
-              id="procedure-duration"
-              label="Duração em minutos"
-              type="number"
-              placeholder="60"
-              formControlName="durationMinutes"
-              [required]="true"
-              [error]="
-                form.controls.durationMinutes.touched && form.controls.durationMinutes.invalid
-                  ? 'Informe uma duração válida.'
-                  : ''
-              "
-            ></vc-input>
-          </div>
-
-          <div class="vc-col-12 vc-col-md-6 vc-col-lg-4">
-            <vc-input
-              id="procedure-price"
-              label="Preço por sessão (R$)"
-              type="number"
-              placeholder="250"
-              formControlName="sessionPrice"
-              [required]="true"
-              [error]="
-                form.controls.sessionPrice.touched && form.controls.sessionPrice.invalid
-                  ? 'Informe um preço válido.'
-                  : ''
-              "
-            ></vc-input>
-          </div>
-
-          <div class="vc-col-12 vc-col-md-6 vc-col-lg-4">
-            <vc-input
-              id="procedure-session-count"
-              label="Número de sessões"
-              type="number"
-              placeholder="1"
-              formControlName="sessionCount"
-              [required]="true"
-              [error]="
-                form.controls.sessionCount.touched && form.controls.sessionCount.invalid
-                  ? 'Informe a quantidade de sessões.'
-                  : ''
-              "
-            ></vc-input>
-          </div>
-
-          <div class="vc-col-12 proceeding-form__availability">
-            <vc-checkbox
-              id="procedure-active"
-              label="Disponível para agendamento"
-              description="Quando ativo, o procedimento aparece nas buscas e pode ser selecionado em novos atendimentos."
-              formControlName="active"
-            ></vc-checkbox>
-          </div>
-        </div>
-      </div>
-
-      <div class="proceeding-form__section proceeding-form__section--accent">
-        <div class="proceeding-form__section-header">
-          <span class="proceeding-form__section-eyebrow">Apresentação comercial</span>
-          <p class="proceeding-form__section-description">
-            Registre o resumo usado pela equipe clínica e comercial para apresentar o procedimento.
-          </p>
-        </div>
-
-        <div class="vc-row proceeding-form__grid">
-          <div class="vc-col-12">
             <label class="proceeding-form__description" for="procedure-description">
               <span class="proceeding-form__description-label">Descrição comercial <span aria-hidden="true">*</span></span>
               <textarea
                 id="procedure-description"
-                rows="4"
+                rows="5"
                 placeholder="Explique o benefício principal, o protocolo e as orientações para a equipe."
                 required
                 formControlName="description"
@@ -174,11 +99,77 @@
                 Informe uma descrição com pelo menos 10 caracteres.
               </small>
             </label>
-          </div>
+          </section>
         </div>
+
+        <aside class="proceeding-form__aside" aria-labelledby="procedure-operation-title">
+          <div class="proceeding-form__section-header proceeding-form__section-header--aside">
+            <span class="proceeding-form__step" aria-hidden="true">R$</span>
+            <div>
+              <h3 id="procedure-operation-title">Agenda e cobrança</h3>
+              <p>Defina duração, sessões e valor do protocolo.</p>
+            </div>
+          </div>
+
+          <div class="proceeding-form__operation-grid">
+            <vc-input
+              id="procedure-duration"
+              label="Duração em minutos"
+              type="number"
+              placeholder="60"
+              formControlName="durationMinutes"
+              [required]="true"
+              [error]="
+                form.controls.durationMinutes.touched && form.controls.durationMinutes.invalid
+                  ? 'Informe uma duração válida.'
+                  : ''
+              "
+            ></vc-input>
+
+            <vc-input
+              id="procedure-session-count"
+              label="Número de sessões"
+              type="number"
+              placeholder="1"
+              formControlName="sessionCount"
+              [required]="true"
+              [error]="
+                form.controls.sessionCount.touched && form.controls.sessionCount.invalid
+                  ? 'Informe a quantidade de sessões.'
+                  : ''
+              "
+            ></vc-input>
+
+            <vc-input
+              id="procedure-price"
+              label="Preço por sessão (R$)"
+              type="number"
+              placeholder="250"
+              formControlName="sessionPrice"
+              [required]="true"
+              [error]="
+                form.controls.sessionPrice.touched && form.controls.sessionPrice.invalid
+                  ? 'Informe um preço válido.'
+                  : ''
+              "
+            ></vc-input>
+          </div>
+
+          <div class="proceeding-form__availability">
+            <vc-checkbox
+              id="procedure-active"
+              label="Disponível para agendamento"
+              description="Exibe este procedimento nas buscas e em novos atendimentos."
+              formControlName="active"
+            ></vc-checkbox>
+          </div>
+        </aside>
       </div>
 
+      <p class="proceeding-form__error" *ngIf="error">{{ error }}</p>
+
       <div class="proceeding-form__footer">
+        <p>Revise os dados antes de disponibilizar o procedimento para a equipe.</p>
         <div class="proceeding-form__actions">
           <vc-button type="button" variant="ghost" (click)="resetForm()">Limpar</vc-button>
           <vc-button type="submit" [loading]="loading" [disabled]="loading">
@@ -186,8 +177,6 @@
           </vc-button>
         </div>
       </div>
-
-      <p class="proceeding-form__error" *ngIf="error">{{ error }}</p>
     </div>
   </fieldset>
 </form>

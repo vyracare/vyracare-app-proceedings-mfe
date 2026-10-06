@@ -4,10 +4,8 @@ import { FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Va
 import {
   VcButtonComponent,
   VcCheckboxComponent,
-  VcHeadingComponent,
   VcInputComponent,
-  VcSelectComponent,
-  VcTextComponent
+  VcSelectComponent
 } from '@vyracare/design-system';
 import type { VcSelectOption } from '@vyracare/design-system';
 import { AestheticProcedurePayload } from '../../models/proceeding.model';
@@ -20,10 +18,8 @@ import { AestheticProcedurePayload } from '../../models/proceeding.model';
     ReactiveFormsModule,
     VcButtonComponent,
     VcCheckboxComponent,
-    VcHeadingComponent,
     VcInputComponent,
-    VcSelectComponent,
-    VcTextComponent
+    VcSelectComponent
   ],
   templateUrl: './proceeding-form.component.html',
   styleUrl: './proceeding-form.component.scss',
