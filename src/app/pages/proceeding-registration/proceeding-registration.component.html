@@ -33,11 +33,11 @@
           <tr *ngIf="listLoading()"><td colspan="5" class="empty">Carregando procedimentos...</td></tr>
           <tr *ngIf="!listLoading() && filteredProceedings().length === 0"><td colspan="5" class="empty">Nenhum procedimento encontrado.</td></tr>
           <tr *ngFor="let proceeding of filteredProceedings(); trackBy: trackProceeding">
-            <td><strong>{{ proceeding.name }}</strong><small>{{ proceeding.code }}</small></td>
-            <td>{{ proceeding.category }}</td>
-            <td>{{ proceeding.durationMinutes }} min</td>
-            <td>{{ formatCurrency(proceeding.sessionPrice) }}</td>
-            <td><span class="status" [class.active]="proceeding.active" [class.inactive]="!proceeding.active">{{ proceeding.active ? 'Ativo' : 'Inativo' }}</span></td>
+            <td data-label="Procedimento"><strong>{{ proceeding.name }}</strong><small>{{ proceeding.code }}</small></td>
+            <td data-label="Categoria">{{ proceeding.category }}</td>
+            <td data-label="Duração">{{ proceeding.durationMinutes }} min</td>
+            <td data-label="Valor">{{ formatCurrency(proceeding.sessionPrice) }}</td>
+            <td data-label="Status"><span class="status" [class.active]="proceeding.active" [class.inactive]="!proceeding.active">{{ proceeding.active ? 'Ativo' : 'Inativo' }}</span></td>
           </tr>
         </tbody>
       </table>

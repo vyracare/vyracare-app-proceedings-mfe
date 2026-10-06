@@ -150,11 +150,15 @@
 
 @media (max-width: 720px) {
   .proceeding-form {
-    &__footer { align-items: stretch; flex-direction: column; padding: 1.5rem; }
-    &__main { padding: 0 1.5rem; }
-    &__aside { padding: 1.5rem; }
+    &__card { border-radius: 16px; }
+    &__footer { align-items: stretch; flex-direction: column; padding: 1rem; }
+    &__main { padding: 0 1rem; }
+    &__aside { padding: 1rem; }
+    &__section { padding: 1.35rem 0; }
+    &__section-header { gap: .65rem; margin-bottom: 1rem; }
     &__grid--identification, &__operation-grid { grid-template-columns: 1fr; }
     &__actions { align-items: stretch; flex-direction: column-reverse; width: 100%; }
-    &__error { margin-left: 1.5rem; margin-right: 1.5rem; }
+    &__error { margin-left: 1rem; margin-right: 1rem; }
+    &__description-textarea { font-size: 1rem; }
   }
 }
