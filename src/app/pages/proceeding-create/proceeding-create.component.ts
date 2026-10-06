@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { VcHeadingComponent, VcTextComponent } from '@vyracare/design-system';
+import { VcHeadingComponent, VcTextComponent, VcToastService } from '@vyracare/design-system';
 import { ProceedingFormComponent } from '../../components/proceeding-form/proceeding-form.component';
 import { AestheticProcedurePayload } from '../../models/proceeding.model';
 import { ProceedingService } from '../../services/proceeding.service';
@@ -20,7 +20,8 @@ export class ProceedingCreatePageComponent {
 
   constructor(
     private readonly proceedingService: ProceedingService,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly toast: VcToastService
   ) {}
 
   /** Persiste o procedimento e retorna ao catalogo depois do sucesso. */
@@ -30,11 +31,14 @@ export class ProceedingCreatePageComponent {
     this.proceedingService.registerProcedure(payload).subscribe({
       next: () => {
         this.loading.set(false);
+        this.toast.success('Procedimento cadastrado', 'O procedimento foi salvo com sucesso.');
         void this.router.navigate(['/cadastro/procedimentos']);
       },
       error: () => {
         this.loading.set(false);
-        this.error.set('Falha ao salvar procedimento. Tente novamente.');
+        const message = 'Falha ao salvar procedimento. Tente novamente.';
+        this.error.set(message);
+        this.toast.error('Nao foi possivel cadastrar o procedimento', message);
       }
     });
   }
