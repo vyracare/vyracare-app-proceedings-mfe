@@ -26,6 +26,12 @@
     gap: 0.4rem;
   }
 
+  &__required-note {
+    color: var(--color-muted);
+    font-size: 0.78rem;
+    margin-top: 0.35rem;
+  }
+
   &__eyebrow {
     color: var(--color-primary);
     font-size: 0.78rem;
@@ -84,6 +90,10 @@
   &__description-label {
     color: var(--color-text);
     font-weight: 600;
+
+    span {
+      color: var(--color-accent);
+    }
   }
 
   &__description-textarea {
@@ -114,76 +124,12 @@
     font-size: 0.75rem;
   }
 
-  /* Bloco de ativacao do procedimento */
-  &__toggle {
-    align-items: center;
-    background: #f8f7ff;
-    border: 1px solid rgba(90, 59, 231, 0.12);
-    border-radius: 14px;
-    display: flex;
-    gap: 1rem;
-    padding: 1rem;
-    width: 100%;
-  }
+  &__availability {
+    padding-top: 0.25rem;
 
-  &__toggle-content {
-    display: flex;
-    flex-direction: column;
-  }
-
-  &__toggle-title {
-    color: var(--color-text);
-    display: block;
-  }
-
-  &__toggle-text {
-    color: var(--color-muted);
-    font-size: 0.85rem;
-    margin: 0.2rem 0 0;
-  }
-
-  /* Switch customizado */
-  &__switch {
-    align-items: center;
-    display: inline-flex;
-    height: 28px;
-    position: relative;
-    width: 48px;
-
-    input {
-      height: 0;
-      opacity: 0;
-      width: 0;
+    vc-checkbox {
+      display: block;
     }
-  }
-
-  &__switch-slider {
-    background: rgba(90, 59, 231, 0.2);
-    border-radius: 999px;
-    inset: 0;
-    position: absolute;
-    transition: 0.2s ease;
-
-    &::before {
-      background: #fff;
-      border-radius: 50%;
-      bottom: 3px;
-      box-shadow: 0 4px 10px rgba(44, 56, 120, 0.2);
-      content: '';
-      height: 22px;
-      left: 3px;
-      position: absolute;
-      transition: 0.2s ease;
-      width: 22px;
-    }
-  }
-
-  &__switch input:checked + &__switch-slider {
-    background: linear-gradient(135deg, #6e4ef5, #5ac4ff);
-  }
-
-  &__switch input:checked + &__switch-slider::before {
-    transform: translateX(20px);
   }
 
   /* Rodape com acoes */
@@ -249,11 +195,6 @@
 
     &__section {
       padding: 1.2rem;
-    }
-
-    &__toggle {
-      align-items: flex-start;
-      flex-direction: column;
     }
 
     &__footer {

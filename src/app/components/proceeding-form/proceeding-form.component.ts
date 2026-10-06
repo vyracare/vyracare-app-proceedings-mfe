@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import {
   VcButtonComponent,
+  VcCheckboxComponent,
   VcHeadingComponent,
   VcInputComponent,
   VcSelectComponent,
@@ -18,6 +19,7 @@ import { AestheticProcedurePayload } from '../../models/proceeding.model';
     CommonModule,
     ReactiveFormsModule,
     VcButtonComponent,
+    VcCheckboxComponent,
     VcHeadingComponent,
     VcInputComponent,
     VcSelectComponent,
