@@ -1,8 +1,6 @@
 .proceeding-form {
   --form-border: rgba(90, 59, 231, 0.13);
-  --form-soft: #f7f5ff;
   color: var(--color-text);
-  width: 100%;
 
   &__fieldset { border: 0; margin: 0; padding: 0; }
 
@@ -108,7 +106,6 @@
     padding: 1rem;
     resize: vertical;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    width: 100%;
 
     &:focus { border-color: var(--color-primary); box-shadow: 0 0 0 3px rgba(90, 59, 231, 0.15); outline: none; }
     &--invalid { border-color: var(--color-accent); box-shadow: 0 0 0 3px rgba(255, 108, 136, 0.18); }
@@ -157,7 +154,7 @@
     &__section { padding: 1.35rem 0; }
     &__section-header { gap: .65rem; margin-bottom: 1rem; }
     &__grid--identification, &__operation-grid { grid-template-columns: 1fr; }
-    &__actions { align-items: stretch; flex-direction: column-reverse; width: 100%; }
+    &__actions { align-items: center; justify-content: space-between; }
     &__error { margin-left: 1rem; margin-right: 1rem; }
     &__description-textarea { font-size: 1rem; }
   }

@@ -171,7 +171,7 @@
       <div class="proceeding-form__footer">
         <p>Revise os dados antes de disponibilizar o procedimento para a equipe.</p>
         <div class="proceeding-form__actions">
-          <vc-button type="button" variant="ghost" (click)="resetForm()">Limpar</vc-button>
+          <vc-button type="button" variant="secondary" (click)="resetForm()">Limpar</vc-button>
           <vc-button type="submit" [loading]="loading" [disabled]="loading">
             {{ loading ? 'Salvando...' : 'Salvar procedimento' }}
           </vc-button>
