@@ -23,7 +23,9 @@
         <span>Buscar procedimento</span>
         <input #searchInput type="search" placeholder="Nome, código ou categoria" (input)="search(searchInput.value)" />
       </label>
-      <vc-button type="button" (click)="search(searchInput.value)">Buscar</vc-button>
+      <vc-tooltip text="Buscar procedimento" position="top">
+        <vc-icon-button icon="search" ariaLabel="Buscar procedimento" variant="solid" size="lg" (action)="search(searchInput.value)"></vc-icon-button>
+      </vc-tooltip>
     </div>
 
     <div class="table-wrapper">

@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { VcButtonComponent, VcHeadingComponent, VcTextComponent } from '@vyracare/design-system';
+import { VcHeadingComponent, VcIconButtonComponent, VcTextComponent, VcTooltipComponent } from '@vyracare/design-system';
 import { AestheticProcedure } from '../../models/proceeding.model';
 import { ProceedingService } from '../../services/proceeding.service';
 
@@ -11,8 +11,9 @@ import { ProceedingService } from '../../services/proceeding.service';
   imports: [
     CommonModule,
     RouterLink,
-    VcButtonComponent,
     VcHeadingComponent,
+    VcIconButtonComponent,
+    VcTooltipComponent,
     VcTextComponent
   ],
   templateUrl: './proceeding-registration.component.html',
