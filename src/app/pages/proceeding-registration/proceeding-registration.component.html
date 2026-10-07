@@ -18,15 +18,7 @@
       <a class="primary-action" routerLink="/cadastro/procedimentos/novo">Cadastrar procedimento</a>
     </div>
 
-    <div class="search-row">
-      <label>
-        <span>Buscar procedimento</span>
-        <input #searchInput type="search" placeholder="Nome, código ou categoria" (input)="search(searchInput.value)" />
-      </label>
-      <vc-tooltip text="Buscar procedimento" position="top">
-        <vc-icon-button icon="search" ariaLabel="Buscar procedimento" variant="solid" size="lg" (action)="search(searchInput.value)"></vc-icon-button>
-      </vc-tooltip>
-    </div>
+    <vc-search class="search-row" id="proceeding-search" label="Buscar procedimento" placeholder="Nome, código ou categoria" [action]="true" actionLabel="Buscar procedimento" (search)="search($event)"></vc-search>
 
     <div class="table-wrapper">
       <table>

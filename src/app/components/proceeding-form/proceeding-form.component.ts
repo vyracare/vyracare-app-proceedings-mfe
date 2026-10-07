@@ -5,7 +5,8 @@ import {
   VcButtonComponent,
   VcCheckboxComponent,
   VcInputComponent,
-  VcSelectComponent
+  VcSelectComponent,
+  VcTextareaComponent
 } from '@vyracare/design-system';
 import type { VcSelectOption } from '@vyracare/design-system';
 import { AestheticProcedurePayload } from '../../models/proceeding.model';
@@ -19,7 +20,8 @@ import { AestheticProcedurePayload } from '../../models/proceeding.model';
     VcButtonComponent,
     VcCheckboxComponent,
     VcInputComponent,
-    VcSelectComponent
+    VcSelectComponent,
+    VcTextareaComponent
   ],
   templateUrl: './proceeding-form.component.html',
   styleUrl: './proceeding-form.component.scss',

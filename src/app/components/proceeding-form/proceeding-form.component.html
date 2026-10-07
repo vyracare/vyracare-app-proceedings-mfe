@@ -79,26 +79,16 @@
               </div>
             </div>
 
-            <label class="proceeding-form__description" for="procedure-description">
-              <span class="proceeding-form__description-label">Descrição comercial <span aria-hidden="true">*</span></span>
-              <textarea
-                id="procedure-description"
-                rows="5"
-                placeholder="Explique o benefício principal, o protocolo e as orientações para a equipe."
-                required
-                formControlName="description"
-                [class.proceeding-form__description-textarea--invalid]="
-                  form.controls.description.touched && form.controls.description.invalid
-                "
-                class="proceeding-form__description-textarea"
-              ></textarea>
-              <small
-                class="proceeding-form__description-error"
-                *ngIf="form.controls.description.touched && form.controls.description.invalid"
-              >
-                Informe uma descrição com pelo menos 10 caracteres.
-              </small>
-            </label>
+            <vc-textarea
+              class="proceeding-form__description"
+              id="procedure-description"
+              label="Descrição comercial"
+              [rows]="5"
+              placeholder="Explique o benefício principal, o protocolo e as orientações para a equipe."
+              [required]="true"
+              formControlName="description"
+              [error]="form.controls.description.touched && form.controls.description.invalid ? 'Informe uma descrição com pelo menos 10 caracteres.' : ''"
+            ></vc-textarea>
           </section>
         </div>
 
