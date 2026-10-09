@@ -5,12 +5,12 @@ import { catchError } from 'rxjs/operators';
 import { environment } from '../../environments/environments';
 import { AestheticProcedure, AestheticProcedurePayload } from '../models/proceeding.model';
 
-type ProceedingsMockModule = AestheticProcedure[] | { default: AestheticProcedure[] };
+export type ProceedingsMockModule = AestheticProcedure[] | { default: AestheticProcedure[] };
 
 const defaultProceedingsMock = require('../mock/default-procedures.json') as ProceedingsMockModule;
 const DEFAULT_PROCEEDINGS = normalizeProceedingsMock(defaultProceedingsMock);
 
-function normalizeProceedingsMock(mockModule: ProceedingsMockModule): AestheticProcedure[] {
+export function normalizeProceedingsMock(mockModule: ProceedingsMockModule): AestheticProcedure[] {
   if (Array.isArray(mockModule)) {
     return mockModule;
   }
