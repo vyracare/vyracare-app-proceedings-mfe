@@ -1,9 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { of, throwError } from 'rxjs';
+import { of } from 'rxjs';
 import { ProceedingRegistrationPageComponent } from './proceeding-registration.component';
 import { ProceedingService } from '../../services/proceeding.service';
-import { AestheticProcedure, AestheticProcedurePayload } from '../../models/proceeding.model';
+import { AestheticProcedure } from '../../models/proceeding.model';
 
 describe('ProceedingRegistrationPageComponent', () => {
   let proceedingService: jest.Mocked<ProceedingService>;
@@ -35,7 +35,7 @@ describe('ProceedingRegistrationPageComponent', () => {
     expect(proceedingService.listProceedings).toHaveBeenCalled();
   });
 
-  it('should group the catalog by category with formatted description', () => {
+  it('should filter the catalog by name, code or category', () => {
     const seededProceedings: AestheticProcedure[] = [
       {
         id: 'laser-1',
@@ -73,75 +73,26 @@ describe('ProceedingRegistrationPageComponent', () => {
     const component = fixture.componentInstance;
     fixture.detectChanges();
 
-    const groupedCatalog = (component as any).catalogByCategory();
+    component.search('fac-002');
 
-    expect(groupedCatalog).toHaveLength(2);
-    expect(groupedCatalog[0].category).toBe('Facial');
-    expect(groupedCatalog[0].subtitle).toBe('1 procedimento(s) registrado(s)');
-    expect(groupedCatalog[0].items[0].icon).toBe('pause-circle');
-    expect(groupedCatalog[0].items[0].description).toContain('R$');
-    expect((component as any).categoryCount()).toBe(2);
-    expect((component as any).activeProceedings()).toBe(1);
-    expect((component as any).totalProceedings()).toBe(2);
+    expect((component as any).filteredProceedings()).toEqual([seededProceedings[1]]);
+    component.search('laser');
+    expect((component as any).filteredProceedings()).toEqual([seededProceedings[0]]);
+    component.search('');
+    expect((component as any).filteredProceedings()).toEqual(seededProceedings);
+    expect((component as any).formatCurrency(280)).toContain('280');
   });
 
-  it('should handle successful procedure registration', () => {
+  it('should track proceedings by id', () => {
     const fixture = TestBed.createComponent(ProceedingRegistrationPageComponent);
     const component = fixture.componentInstance;
-
-    const payload: AestheticProcedurePayload = {
-      name: 'Peeling quimico controlado',
-      category: 'Facial',
-      code: 'FAC-011',
-      targetArea: 'Rosto',
-      durationMinutes: 50,
-      sessionPrice: 320,
-      sessionCount: 3,
-      recoveryTime: '48 horas',
-      description: 'Controle de textura, manchas leves e renovacao epidermica.',
-      active: true
+    const proceeding = {
+      id: 'proc-1', name: 'Botox', category: 'Injetaveis', code: 'INJ-001', targetArea: 'Face',
+      durationMinutes: 45, sessionPrice: 950, sessionCount: 1, recoveryTime: '24 horas',
+      description: 'Procedimento facial.', active: true, createdAt: '2026-05-01T09:00:00.000Z'
     };
 
-    proceedingService.registerProcedure.mockReturnValue(
-      of({
-        ...payload,
-        id: 'new-id',
-        createdAt: new Date().toISOString()
-      })
-    );
-
-    component.handleSubmit(payload);
-
-    expect(proceedingService.registerProcedure).toHaveBeenCalledWith(payload);
-    expect((component as any).loading()).toBe(false);
-    expect((component as any).success()).toBe(true);
-    expect((component as any).error()).toBeNull();
+    expect((component as any).trackProceeding(0, proceeding)).toBe('proc-1');
   });
 
-  it('should handle failed procedure registration', () => {
-    const fixture = TestBed.createComponent(ProceedingRegistrationPageComponent);
-    const component = fixture.componentInstance;
-
-    const payload: AestheticProcedurePayload = {
-      name: 'Radiofrequencia facial',
-      category: 'Facial',
-      code: 'FAC-021',
-      targetArea: 'Face',
-      durationMinutes: 45,
-      sessionPrice: 290,
-      sessionCount: 6,
-      recoveryTime: 'Sem afastamento',
-      description: 'Melhora da firmeza e da circulacao local.',
-      active: true
-    };
-
-    proceedingService.registerProcedure.mockReturnValue(throwError(() => new Error('fail')));
-
-    component.handleSubmit(payload);
-
-    expect(proceedingService.registerProcedure).toHaveBeenCalledWith(payload);
-    expect((component as any).loading()).toBe(false);
-    expect((component as any).success()).toBe(false);
-    expect((component as any).error()).toBe('Falha ao salvar procedimento. Tente novamente.');
-  });
 });

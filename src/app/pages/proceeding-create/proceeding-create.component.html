@@ -1,0 +1,18 @@
+<main class="create-page">
+  <nav class="breadcrumb">
+    <a routerLink="/dashboard">Dashboard</a><span>/</span>
+    <a routerLink="/cadastro/procedimentos">Procedimentos</a><span>/</span><span>Cadastrar</span>
+  </nav>
+  <header class="page-header">
+    <div>
+      <span class="eyebrow">Catálogo clínico</span>
+      <vc-heading [level]="1">Cadastro de procedimento</vc-heading>
+      <vc-text [muted]="true">Defina os dados clínicos e comerciais do procedimento.</vc-text>
+    </div>
+  </header>
+  <vyracare-proceeding-form
+    [loading]="loading()"
+    [error]="error()"
+    (formSubmit)="handleSubmit($event)"
+  ></vyracare-proceeding-form>
+</main>

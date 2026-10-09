@@ -1,18 +1,8 @@
 import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import {
-  VcCardComponent,
-  VcHeadingComponent,
-  VcListComponent,
-  VcTextComponent
-} from '@vyracare/design-system';
-import { ProceedingFormComponent } from '../../components/proceeding-form/proceeding-form.component';
-import {
-  AestheticProcedure,
-  AestheticProcedurePayload,
-  ProcedureCategorySummary
-} from '../../models/proceeding.model';
+import { VcHeadingComponent, VcSearchComponent, VcTextComponent } from '@vyracare/design-system';
+import { AestheticProcedure } from '../../models/proceeding.model';
 import { ProceedingService } from '../../services/proceeding.service';
 
 @Component({
@@ -21,95 +11,60 @@ import { ProceedingService } from '../../services/proceeding.service';
   imports: [
     CommonModule,
     RouterLink,
-    ProceedingFormComponent,
-    VcCardComponent,
     VcHeadingComponent,
-    VcListComponent,
+    VcSearchComponent,
     VcTextComponent
   ],
   templateUrl: './proceeding-registration.component.html',
   styleUrl: './proceeding-registration.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-/** Pagina principal do MFE, responsavel por compor o formulario, os indicadores e o catalogo de procedimentos. */
+/** Coordena a consulta e o filtro do catalogo de procedimentos. */
 export class ProceedingRegistrationPageComponent {
-  /** Controla o estado de submissao do formulario para bloquear interacoes duplicadas. */
-  protected readonly loading = signal(false);
-  /** Exibe a mensagem de erro operacional em caso de falha na gravacao. */
-  protected readonly error = signal<string | null>(null);
-  /** Sinaliza visualmente quando o cadastro foi concluido com sucesso. */
-  protected readonly success = signal(false);
-  /** Armazena o catalogo de proceedings carregado pelo servico. */
+  protected readonly listLoading = signal(true);
   protected readonly proceedings = signal<AestheticProcedure[]>([]);
-  /** Lista de categorias destacadas na lateral para reforcar a organizacao do catalogo. */
-  protected readonly categoryHighlights = ['Facial', 'Corporal', 'Laser', 'Injetaveis', 'Capilar', 'Bem-estar'];
-  /** Resume o total de itens existentes no catalogo. */
-  protected readonly totalProceedings = computed(() => this.proceedings().length);
-  /** Resume quantos procedimentos estao liberados para comercializacao. */
-  protected readonly activeProceedings = computed(() => this.proceedings().filter((proceeding) => proceeding.active).length);
-  /** Informa quantas categorias distintas existem hoje no catalogo. */
-  protected readonly categoryCount = computed(() => new Set(this.proceedings().map((proceeding) => proceeding.category)).size);
-  /** Agrupa os proceedings por categoria para renderizar o catalogo em blocos de leitura rapida. */
-  protected readonly catalogByCategory = computed<ProcedureCategorySummary[]>(() => {
-    const categoryMap = new Map<string, AestheticProcedure[]>();
+  protected readonly searchTerm = signal('');
+  protected readonly filteredProceedings = computed(() => {
+    const term = this.searchTerm().trim().toLocaleLowerCase('pt-BR');
 
-    for (const proceeding of this.proceedings()) {
-      const currentCategory = categoryMap.get(proceeding.category) ?? [];
-      currentCategory.push(proceeding);
-      categoryMap.set(proceeding.category, currentCategory);
+    if (!term) {
+      return this.proceedings();
     }
 
-    return Array.from(categoryMap.entries())
-      .sort(([left], [right]) => left.localeCompare(right))
-      .map(([category, proceedings]) => ({
-        category,
-        subtitle: `${proceedings.length} procedimento(s) registrado(s)`,
-        items: proceedings.map((proceeding) => ({
-          icon: proceeding.active ? 'check2-circle' : 'pause-circle',
-          title: proceeding.name,
-          description: `${proceeding.code} - ${proceeding.targetArea} - ${proceeding.durationMinutes} min - ${this.formatCurrency(proceeding.sessionPrice)}`
-        }))
-      }));
+    return this.proceedings().filter((proceeding) =>
+      [proceeding.name, proceeding.code, proceeding.category]
+        .some((value) => value.toLocaleLowerCase('pt-BR').includes(term))
+    );
   });
 
   constructor(private readonly proceedingService: ProceedingService) {
     this.loadCatalog();
   }
 
-  /**
-   * Recebe o payload do formulario, delega a persistencia ao servico
-   * e atualiza os estados visuais da pagina conforme o resultado.
-   */
-  handleSubmit(payload: AestheticProcedurePayload): void {
-    this.loading.set(true);
-    this.error.set(null);
-    this.success.set(false);
-
-    this.proceedingService.registerProcedure(payload).subscribe({
-      next: () => {
-        this.loadCatalog();
-        this.loading.set(false);
-        this.success.set(true);
-      },
-      error: () => {
-        this.loading.set(false);
-        this.error.set('Falha ao salvar procedimento. Tente novamente.');
-      }
-    });
+  /** Atualiza o termo usado para filtrar nome, codigo e categoria do catalogo. */
+  search(value: string): void {
+    this.searchTerm.set(value);
   }
 
-  /** Recarrega o catalogo atual para refletir o estado mais recente da fonte de dados. */
-  private loadCatalog(): void {
-    this.proceedingService.listProceedings().subscribe((proceedings) => {
-      this.proceedings.set(proceedings);
-    });
+  /** Fornece uma chave estavel para a renderizacao das linhas de procedimentos. */
+  protected trackProceeding(_: number, proceeding: AestheticProcedure): string {
+    return proceeding.id;
   }
 
-  /** Formata valores monetarios no padrao brasileiro para exibicao no catalogo. */
-  private formatCurrency(value: number): string {
+  /** Formata o valor da sessao no padrao monetario brasileiro. */
+  protected formatCurrency(value: number): string {
     return new Intl.NumberFormat('pt-BR', {
       style: 'currency',
       currency: 'BRL'
     }).format(value);
+  }
+
+  /** Recarrega o catalogo apresentado na tabela. */
+  private loadCatalog(): void {
+    this.listLoading.set(true);
+    this.proceedingService.listProceedings().subscribe((proceedings) => {
+      this.proceedings.set(proceedings);
+      this.listLoading.set(false);
+    });
   }
 }

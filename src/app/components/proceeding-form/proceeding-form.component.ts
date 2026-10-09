@@ -3,10 +3,10 @@ import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import {
   VcButtonComponent,
-  VcHeadingComponent,
+  VcCheckboxComponent,
   VcInputComponent,
   VcSelectComponent,
-  VcTextComponent
+  VcTextareaComponent
 } from '@vyracare/design-system';
 import type { VcSelectOption } from '@vyracare/design-system';
 import { AestheticProcedurePayload } from '../../models/proceeding.model';
@@ -18,10 +18,10 @@ import { AestheticProcedurePayload } from '../../models/proceeding.model';
     CommonModule,
     ReactiveFormsModule,
     VcButtonComponent,
-    VcHeadingComponent,
+    VcCheckboxComponent,
     VcInputComponent,
     VcSelectComponent,
-    VcTextComponent
+    VcTextareaComponent
   ],
   templateUrl: './proceeding-form.component.html',
   styleUrl: './proceeding-form.component.scss',
