@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { ProceedingService } from './proceeding.service';
+import { normalizeProceedingsMock, ProceedingService } from './proceeding.service';
 import { AestheticProcedure, AestheticProcedurePayload } from '../models/proceeding.model';
 import { environment } from '../../environments/environments';
 
@@ -21,6 +21,13 @@ describe('ProceedingService', () => {
 
   afterEach(() => {
     httpMock.verify();
+  });
+
+  it('should normalize default-exported mock data', () => {
+    const procedures = [{ id: '1' }] as unknown as AestheticProcedure[];
+
+    expect(normalizeProceedingsMock({ default: procedures })).toBe(procedures);
+    expect(normalizeProceedingsMock({} as { default: AestheticProcedure[] })).toEqual([]);
   });
 
   it('should load proceedings from the API', (done) => {

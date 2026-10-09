@@ -1,4 +1,6 @@
 import { TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
+import { VcButtonComponent } from '@vyracare/design-system';
 import { ProceedingFormComponent } from './proceeding-form.component';
 import { AestheticProcedurePayload } from '../../models/proceeding.model';
 
@@ -84,5 +86,15 @@ describe('ProceedingFormComponent', () => {
       description: '',
       active: true
     });
+  });
+
+  it('should render reset as a secondary action before save', () => {
+    const fixture = TestBed.createComponent(ProceedingFormComponent);
+    fixture.detectChanges();
+    const buttons = fixture.debugElement.queryAll(By.directive(VcButtonComponent));
+
+    expect(buttons[0].componentInstance.variant).toBe('secondary');
+    expect(buttons[0].nativeElement.textContent).toContain('Limpar');
+    expect(buttons[1].nativeElement.textContent).toContain('Salvar procedimento');
   });
 });
