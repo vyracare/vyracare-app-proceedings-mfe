@@ -156,7 +156,9 @@
         </aside>
       </div>
 
-      <p class="proceeding-form__error" *ngIf="error">{{ error }}</p>
+      @if (error) {
+        <p class="proceeding-form__error">{{ error }}</p>
+      }
 
       <div class="proceeding-form__footer">
         <p>Revise os dados antes de disponibilizar o procedimento para a equipe.</p>

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RouterLink } from '@angular/router';
 import { VcHeadingComponent, VcSearchComponent, VcTextComponent } from '@vyracare/design-system';
 import { AestheticProcedure } from '../../models/proceeding.model';
@@ -9,12 +9,11 @@ import { ProceedingService } from '../../services/proceeding.service';
   selector: 'vyracare-proceeding-registration-page',
   standalone: true,
   imports: [
-    CommonModule,
     RouterLink,
     VcHeadingComponent,
     VcSearchComponent,
     VcTextComponent
-  ],
+],
   templateUrl: './proceeding-registration.component.html',
   styleUrl: './proceeding-registration.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
