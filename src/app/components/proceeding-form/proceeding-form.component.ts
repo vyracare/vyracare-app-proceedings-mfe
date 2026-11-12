@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import {
   VcButtonComponent,
@@ -15,14 +15,13 @@ import { AestheticProcedurePayload } from '../../models/proceeding.model';
   selector: 'vyracare-proceeding-form',
   standalone: true,
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     VcButtonComponent,
     VcCheckboxComponent,
     VcInputComponent,
     VcSelectComponent,
     VcTextareaComponent
-  ],
+],
   templateUrl: './proceeding-form.component.html',
   styleUrl: './proceeding-form.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

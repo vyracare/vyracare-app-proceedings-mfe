@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { normalizeProceedingsMock, ProceedingService } from './proceeding.service';
 import { AestheticProcedure, AestheticProcedurePayload } from '../models/proceeding.model';
@@ -12,7 +12,7 @@ describe('ProceedingService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [ProceedingService, provideHttpClient(), provideHttpClientTesting()]
+      providers: [ProceedingService, provideHttpClient(withXhr()), provideHttpClientTesting()]
     });
 
     service = TestBed.inject(ProceedingService);
